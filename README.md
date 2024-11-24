@@ -1,11 +1,11 @@
 # TooBee Optimization
 
-This project is a public optimization mod for TooBee survival server.
+This project is a public optimization minecraft mod for TooBee survival server.
 
-This mod is in early stage of development.
+This mod is in very early stage of development.
 
 Support for the newest minecraft is updated if and only if TooBee server updates,
-and yet the old version of minecraft is not supported.
+and yet older version of minecraft is not supported.
 
 ## About TooBee Server
 TooBee is a Chinese original survival server belonging to HaoRenFu.
@@ -17,5 +17,12 @@ The version of server equals to this latest minecraft version of this mod.
 - QQ group: 786296062
 - [Discord](https://discord.gg/r4eztFe5)
 
+## Mod Dependencies
+Keep following mods as newest as possible.
+
+- Fabric API
+- Fabric Language Kotlin
+- Lithium
+
 ## What has been done
-*Wait for supplement.*
+Cache some of the calculation results of vast amount of certain entities stacked in a single position.

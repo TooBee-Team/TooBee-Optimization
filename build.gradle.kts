@@ -39,10 +39,10 @@ dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
     modImplementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
-    modImplementation(fabricApi.module(
-        "fabric-lifecycle-events-v1", project.property("fabric_version") as String))
+    modImplementation(fabricApi.module("fabric-lifecycle-events-v1", project.property("fabric_version") as String))
 }
 
 tasks.processResources {
@@ -68,6 +68,6 @@ tasks.withType<KotlinCompile>().configureEach {
 
 tasks.jar {
     from("LICENSE") {
-        rename { "${it}_${project.base.archivesName}" }
+        rename { "${it}_${project.base.archivesName.get()}" }
     }
 }

@@ -4,6 +4,8 @@
   "package": "top.toobee.optimization.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityClassGroupAccessor",
+    "WardenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

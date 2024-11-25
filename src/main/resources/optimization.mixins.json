@@ -5,6 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "EntityClassGroupAccessor",
+    "LivingEntityMixin",
+    "NearestLivingEntitiesSensorMixin",
+    "WardenAttackablesSensorMixin",
     "WardenMixin"
   ],
   "injectors": {

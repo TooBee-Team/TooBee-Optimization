@@ -1,6 +1,6 @@
 # TooBee Optimization
 
-This project is a public optimization minecraft mod for TooBee survival server.
+This project is a public minecraft optimization mod for TooBee survival server.
 
 This mod is in very early stage of development.
 
@@ -25,4 +25,7 @@ Keep following mods as newest as possible.
 - Lithium
 
 ## What has been done
-Cache some of the calculation results of vast amount of certain entities stacked in a single position.
+Most modifications are ensure to be thread safe.
+
+Cache some of the calculation results of vast amount of certain entities stacking in a single position.
+- Warden

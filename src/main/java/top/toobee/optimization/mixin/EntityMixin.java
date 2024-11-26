@@ -11,7 +11,7 @@ import top.toobee.optimization.cache.BeCached;
 public abstract class EntityMixin {
     @Inject(method = "setRemoved", at = @At("HEAD"))
     public final void setRemoved(Entity.RemovalReason reason, CallbackInfo ci) {
-        if ((Object) this instanceof BeCached<?> b)
+        if (this instanceof BeCached<?> b)
             b.toobee$updateCache(null);
     }
 }

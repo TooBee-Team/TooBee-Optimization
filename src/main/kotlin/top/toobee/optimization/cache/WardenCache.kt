@@ -10,16 +10,12 @@ import net.minecraft.util.math.BlockPos
 class WardenCache private constructor(
     world: ServerWorld,
     pos: BlockPos,
-    tracker: MutableList<LivingEntity>,
-    var angerAtTarget: Int = 0
-): StackingMobCache<WardenEntity>(world, pos, tracker) {
-    companion object: Caches<WardenCache>() {
-        override fun getOrCreate(world: ServerWorld, pos: BlockPos, list: List<LivingEntity>): WardenCache {
-            return this.all.computeIfAbsent(world to pos) {
-                WardenCache(world, pos, list.toMutableList())
-            }
-        }
+): StackingMobCache<WardenEntity>(world, pos) {
+    companion object: Caches<WardenEntity, WardenCache>(WardenEntity::class.java) {
+        override fun create(world: ServerWorld, pos: BlockPos): WardenCache = WardenCache(world, pos)
     }
+
+    var angerAtTarget: Int = 0
 
     override fun truncate() {
         super.truncate()
@@ -28,7 +24,7 @@ class WardenCache private constructor(
 
     fun newSense(world: ServerWorld, warden: WardenEntity) {
         val brain = warden.brain
-        val list = this.tracker
+        val list = this.trackers
         brain.remember<List<LivingEntity>>(MemoryModuleType.MOBS, list)
         brain.remember(MemoryModuleType.VISIBLE_MOBS, LivingTargetCache(world, warden, list))
         this.nearestTarget?.let {

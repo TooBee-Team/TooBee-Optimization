@@ -13,8 +13,11 @@ interface AttachedCache<T> {
     var hasUpdatedThisTick: Boolean
 
     fun checkCondition(t: T): Boolean
-    fun truncate()
+    fun truncate() {}
 
+    /**
+     * Run every end of tick to reset some variables
+     */
     fun tick() {
         if (this.lastUpdateTick != this.world.time) {
             this.lastUpdateTick = this.world.time

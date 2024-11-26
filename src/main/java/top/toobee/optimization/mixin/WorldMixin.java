@@ -21,11 +21,11 @@ public abstract class WorldMixin implements CollisionView {
         if (entity instanceof CachedMob<?,?> c && (cache = c.toobee$getCache()) != null) {
             if (cache.getHasUpdatedThisTick()) {
                 p = cache.getSupportingBlockPos();
-                if (p.isPresent() && check(p.get().getX(), p.get().getZ(), box))
-                    return cache.getSupportingBlockPos();
+                if (toobee$check(p, box))
+                    return p;
             } else {
                 p = CollisionView.super.findSupportingBlockPos(entity, box);
-                if (p.isPresent() && check(p.get().getX(), p.get().getZ(), box))
+                if (toobee$check(p, box))
                     cache.setSupportingBlockPos(p);
                 return p;
             }
@@ -34,11 +34,10 @@ public abstract class WorldMixin implements CollisionView {
     }
 
     @Unique
-    private static boolean check(int x, int z, Box box) {
-        int     x1 = (int) box.minX,
-                x2 = (int) box.maxX,
-                z1 = (int) box.minZ,
-                z2 = (int) box.maxZ;
-        return x <= x1 && x2 <= ++x && z <= z1 && ++z <= z2;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static boolean toobee$check(final Optional<BlockPos> p, final Box box) {
+        if (p.isEmpty()) return false;
+        int x = p.get().getX(), z = p.get().getZ();
+        return x <= box.minX && box.maxX <= ++x && z <= box.minZ && box.maxZ <= ++z;
     }
 }

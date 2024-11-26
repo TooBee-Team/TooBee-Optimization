@@ -18,7 +18,7 @@ public abstract class WardenAttackablesSensorMixin {
     private static final String TARGET_METHOD
             = "sense(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/mob/WardenEntity;)V";
 
-    @Inject(method = TARGET_METHOD, cancellable = true, at = @At("HEAD"))
+    @Inject(method = TARGET_METHOD, at = @At("HEAD"), cancellable = true)
     public void head(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
         @SuppressWarnings("unchecked")
         final var cache = ((BeCached<WardenCache>) warden).toobee$getCache();
@@ -32,7 +32,7 @@ public abstract class WardenAttackablesSensorMixin {
     public void tail(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
         if (((BeCached<?>) warden).toobee$getCache() instanceof WardenCache cache) {
             final var x = warden.getBrain().getOptionalMemory(MemoryModuleType.NEAREST_ATTACKABLE);
-            if (x != null && x.isPresent())
+            if (!cache.getHasUpdatedThisTick() && x != null && x.isPresent())
                 cache.setNearestTarget(x.get());
         }
     }

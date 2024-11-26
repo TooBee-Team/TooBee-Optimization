@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.BeCached;
+import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.WardenCache;
 
 import java.util.List;
@@ -20,15 +20,11 @@ public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
     public void tail(final ServerWorld world, final T entity, final CallbackInfo ci, @Local final List<LivingEntity> list) {
         if (entity instanceof WardenEntity warden) {
             @SuppressWarnings("unchecked")
-            final var b = (BeCached<WardenCache>) warden;
+            final var b = (CachedMob<WardenEntity, WardenCache>) warden;
             if (b.toobee$getCache() instanceof WardenCache cache)
-                cache.updateTracker(list);
-            else {
-                // Wait for checking the accuracy of this algorithm on counting valid wardens.
-                final var l = list.stream().filter(w -> w instanceof WardenEntity);
-                if ((l.count() & 0xFFFFFFF0L) != 0)
-                    b.toobee$updateCache(WardenCache.Companion.getOrCreate(world, entity.getBlockPos(), list));
-            }
+                cache.setTrackers(list);
+            else
+                WardenCache.Companion.checkToCreate(b, (ServerWorld) warden.getWorld(), warden.getBlockPos(), list);
         }
     }
 }

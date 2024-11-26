@@ -6,7 +6,6 @@
   "mixins": [
     "EntityClassGroupAccessor",
     "EntityMixin",
-    "LivingEntityMixin",
     "MoveToTargetTaskMixin",
     "NearestLivingEntitiesSensorMixin",
     "WardenAttackablesSensorMixin",

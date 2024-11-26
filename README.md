@@ -2,7 +2,7 @@
 
 This project is a public minecraft optimization mod for TooBee survival server.
 
-This mod is in very early stage of development.
+The mod is in very early stage of development, and notice that it is a dedicated server only mod.
 
 Support for the newest minecraft is updated if and only if TooBee server updates,
 and yet older version of minecraft is not supported.

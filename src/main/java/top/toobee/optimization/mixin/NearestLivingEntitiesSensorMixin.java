@@ -22,10 +22,13 @@ public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
             @SuppressWarnings("unchecked")
             final var b = (BeCached<WardenCache>) warden;
             if (b.toobee$getCache() instanceof WardenCache cache)
-                cache.update(list);
-            // Wait for checking: does the following code have concurrent problem?
-            else if ((list.stream().filter(w -> w instanceof WardenEntity).count() & 0xFFFFFFF0L) != 0)
-                b.toobee$updateCache(WardenCache.Companion.getOrCreate(world, warden.getBlockPos(), list));
+                cache.updateTracker(list);
+            else {
+                // Wait for checking the accuracy of this algorithm on counting valid wardens.
+                final var l = list.stream().filter(w -> w instanceof WardenEntity);
+                if ((l.count() & 0xFFFFFFF0L) != 0)
+                    b.toobee$updateCache(WardenCache.Companion.getOrCreate(world, entity.getBlockPos(), list));
+            }
         }
     }
 }

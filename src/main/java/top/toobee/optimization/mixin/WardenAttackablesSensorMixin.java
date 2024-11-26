@@ -19,30 +19,17 @@ public abstract class WardenAttackablesSensorMixin {
             = "sense(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/mob/WardenEntity;)V";
 
     @Inject(method = TARGET_METHOD, cancellable = true, at = @At("HEAD"))
-    public void cache1(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
+    public void head(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
         @SuppressWarnings("unchecked")
-        final var beCached = (BeCached<WardenCache>) warden;
-        var cache = beCached.toobee$getCache();
-
-        if (cache != null && cache.checkCondition(warden)) {
-            if (cache.getHasUpdatedThisTick()) {
-                cache.newSense(serverWorld, warden);
-                ci.cancel();
-            } else {
-                cache.setHasUpdatedThisTick(true);
-            }
-        } else {
-            cache = WardenCache.Companion.findCache(serverWorld, warden.getBlockPos());
-            beCached.toobee$updateCache(cache);
-            if (cache != null) {
-                cache.newSense(serverWorld, warden);
-                ci.cancel();
-            }
+        final var cache = ((BeCached<WardenCache>) warden).toobee$getCache();
+        if (cache != null && cache.getHasUpdatedThisTick()) {
+            cache.newSense(serverWorld, warden);
+            ci.cancel();
         }
     }
 
     @Inject(method = TARGET_METHOD, at = @At("TAIL"))
-    public void cache2(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
+    public void tail(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
         if (((BeCached<?>) warden).toobee$getCache() instanceof WardenCache cache) {
             final var x = warden.getBrain().getOptionalMemory(MemoryModuleType.NEAREST_ATTACKABLE);
             if (x != null && x.isPresent())

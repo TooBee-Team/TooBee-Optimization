@@ -33,13 +33,14 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
     var supportingBlockPos: Optional<BlockPos> = Optional.empty()
     var trackers: List<LivingEntity> = emptyList()
         set (value) {
-            try {
-                if (!this.recheckUpdate.get() && this.lock.tryLock()) {
+            if (!this.recheckUpdate.get() && this.lock.tryLock()) {
+                try {
                     field = value
                     this.recheckUpdate.set(true)
                 }
-            } finally {
-                this.lock.unlock()
+                finally {
+                    this.lock.unlock()
+                }
             }
         }
     var nearestTarget: LivingEntity? = null
@@ -60,8 +61,11 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
         super.tick()
         this.shouldRunMoveToTargetTask = null
         this.supportingBlockPos = Optional.empty()
+        this.supportingBlockPos = Optional.empty()
         this.recheckUpdate.set(false)
     }
+
+    abstract fun newSense(world: ServerWorld, entity: MobEntity)
 
     abstract class Caches<T: MobEntity, S: StackingMobCache<T>> protected constructor(
         private val cls: Class<T>,

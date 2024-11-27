@@ -33,11 +33,13 @@ public abstract class WorldMixin implements CollisionView {
         return CollisionView.super.findSupportingBlockPos(entity, box);
     }
 
+    // Wait for modify
     @Unique
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType"})
     private static boolean toobee$check(final Optional<BlockPos> p, final Box box) {
         if (p.isEmpty()) return false;
         int x = p.get().getX(), z = p.get().getZ();
-        return x <= box.minX && box.maxX <= ++x && z <= box.minZ && box.maxZ <= ++z;
+        return  x <= (int) box.minX && (int) Math.ceil(box.maxX) <= ++x &&
+                z <= (int) box.minZ && (int) Math.ceil(box.maxZ) <= ++z;
     }
 }

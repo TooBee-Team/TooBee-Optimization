@@ -8,6 +8,8 @@
     "EntityMixin",
     "MoveToTargetTaskMixin",
     "NearestLivingEntitiesSensorMixin",
+    "PiglinMixin",
+    "PiglinSpecificSensorMixin",
     "WardenAttackablesSensorMixin",
     "WardenMixin",
     "WorldMixin"

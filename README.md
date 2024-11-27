@@ -41,3 +41,4 @@ More precisely, these mobs are recommended to:
 
 ### Affected Mob
 - **Warden**: usually for pseudo-peace farm in server.
+- **Piglin**: usually for bartering farm.

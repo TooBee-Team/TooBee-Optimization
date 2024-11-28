@@ -42,7 +42,7 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
     modImplementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
-    modImplementation(fabricApi.module("fabric-lifecycle-events-v1", project.property("fabric_version") as String))
+    //modImplementation(fabricApi.module("fabric-lifecycle-events-v1", project.property("fabric_version") as String))
 }
 
 tasks.processResources {

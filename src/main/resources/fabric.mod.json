@@ -22,7 +22,6 @@
     "fabricloader": ">=${loader_version}",
     "fabric-language-kotlin": ">=${kotlin_loader_version}",
     "minecraft": "${minecraft_version}",
-    "fabric-lifecycle-events-v1": "*",
     "lithium": ">=0.14.0"
   }
 }

@@ -6,6 +6,7 @@
   "mixins": [
     "EntityClassGroupAccessor",
     "EntityMixin",
+    "MinecraftServerMixin",
     "MoveToTargetTaskMixin",
     "NearestLivingEntitiesSensorMixin",
     "PiglinMixin",

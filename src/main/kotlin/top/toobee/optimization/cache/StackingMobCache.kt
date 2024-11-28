@@ -37,8 +37,7 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
                 try {
                     field = value
                     this.recheckUpdate.set(true)
-                }
-                finally {
+                } finally {
                     this.lock.unlock()
                 }
             }
@@ -73,7 +72,7 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
     ) {
         fun findCache(world: ServerWorld?, pos: BlockPos): S? = all[world to pos]
 
-        fun values() = this.all.values
+        fun tick() = this.all.values.forEach { it.tick() }
 
         fun checkToCreate(world: ServerWorld, pos: BlockPos, list: List<*>) {
             val count = list.filterIsInstance(cls).count { e -> e.blockPos == pos && e.world === world }

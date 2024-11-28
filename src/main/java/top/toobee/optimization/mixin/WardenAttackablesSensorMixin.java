@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.toobee.optimization.cache.BeCached;
+import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.WardenCache;
 
 @Mixin(WardenAttackablesSensor.class)
@@ -20,8 +21,7 @@ public abstract class WardenAttackablesSensorMixin {
 
     @Inject(method = TARGET_METHOD, at = @At("HEAD"), cancellable = true)
     public void head(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
-        @SuppressWarnings("unchecked")
-        final var cache = ((BeCached<WardenCache>) warden).toobee$getCache();
+        final var cache = ((CachedMob<?,?>) warden).toobee$getCache();
         if (cache != null && cache.getHasUpdatedThisTick()) {
             cache.newSense(serverWorld, warden);
             ci.cancel();

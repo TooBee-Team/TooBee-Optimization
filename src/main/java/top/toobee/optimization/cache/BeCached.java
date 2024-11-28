@@ -10,6 +10,6 @@ public interface BeCached<T extends AttachedCache<?>> {
         }
     }
 
-    void toobee$setCache(final T cache);
+    void toobee$setCache(T cache);
     T toobee$getCache();
 }

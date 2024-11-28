@@ -20,7 +20,6 @@ The version of server equals to this latest minecraft version of this mod.
 ## Mod Dependencies
 Keep following mods as newest as possible.
 
-- Fabric API
 - Fabric Language Kotlin
 - Lithium
 

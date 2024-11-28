@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
@@ -12,8 +13,8 @@ import java.util.concurrent.locks.ReentrantLock
 
 const val MIN_CACHE_SIZE_MASKED = Int.MAX_VALUE - 0b1111
 
-abstract class StackingMobCache<T: MobEntity> protected constructor(
-    final override val world: ServerWorld,
+abstract class StackingMobCache<T : MobEntity> protected constructor(
+    final override val world: World,
     val pos: BlockPos,
 ): AttachedCache<T> {
     override val referencedCounter = AtomicInteger(0)
@@ -66,20 +67,20 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
 
     abstract fun newSense(world: ServerWorld, entity: MobEntity)
 
-    abstract class Caches<T: MobEntity, S: StackingMobCache<T>> protected constructor(
+    abstract class Caches<T : MobEntity, S : StackingMobCache<T>> protected constructor(
         private val cls: Class<T>,
-        protected val all: MutableMap<Pair<ServerWorld?, BlockPos?>, S> = ConcurrentHashMap()
+        protected val all: MutableMap<Pair<World?, BlockPos?>, S> = ConcurrentHashMap()
     ) {
-        fun findCache(world: ServerWorld?, pos: BlockPos): S? = all[world to pos]
+        fun findCache(world: World?, pos: BlockPos): S? = all[world to pos]
 
         fun tick() = this.all.values.forEach { it.tick() }
 
-        fun checkToCreate(world: ServerWorld, pos: BlockPos, list: List<*>) {
+        fun checkToCreate(world: World, pos: BlockPos, list: List<*>) {
             val count = list.filterIsInstance(cls).count { e -> e.blockPos == pos && e.world === world }
             if (count and MIN_CACHE_SIZE_MASKED != 0)
                 all.computeIfAbsent(world to pos) { this.create(world, pos) }
         }
 
-        protected abstract fun create(world: ServerWorld, pos: BlockPos): S
+        protected abstract fun create(world: World, pos: BlockPos): S
     }
 }

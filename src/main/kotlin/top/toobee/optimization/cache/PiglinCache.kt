@@ -10,15 +10,16 @@ import net.minecraft.entity.mob.PiglinEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 import java.util.Optional
 
 @Suppress("PrivatePropertyName")
 class PiglinCache private constructor(
-    world: ServerWorld,
+    world: World,
     pos: BlockPos,
 ): StackingMobCache<PiglinEntity>(world, pos) {
     companion object : Caches<PiglinEntity, PiglinCache>(PiglinEntity::class.java) {
-        override fun create(world: ServerWorld, pos: BlockPos): PiglinCache = PiglinCache(world, pos)
+        override fun create(world: World, pos: BlockPos): PiglinCache = PiglinCache(world, pos)
     }
 
     override fun truncate() {

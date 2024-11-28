@@ -1,11 +1,11 @@
 package top.toobee.optimization.cache
 
-import net.minecraft.server.world.ServerWorld
+import net.minecraft.world.World
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.Lock
 
 interface AttachedCache<T> {
-    val world: ServerWorld
+    val world: World
     val referencedCounter: AtomicInteger
     val lock: Lock
 

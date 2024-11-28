@@ -11,7 +11,7 @@ import java.util.function.BooleanSupplier;
 
 // Substitution of Fabric API, implemented by myself
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
     @Inject(at = @At("TAIL"), method = "tick")
     private void onEndTick(BooleanSupplier shouldKeepTicking, CallbackInfo info) {
         Optimization.Companion.endServerTick();

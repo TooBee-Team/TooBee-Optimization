@@ -20,7 +20,7 @@ public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
         // The implementation of warden is moved to WardenAttackablesSensorMixin
         // Wait for completing more
         if (entity instanceof PiglinEntity mob) {
-            final var cache = ((CachedMob<?, ?>) entity).toobee$getCache();
+            final var cache = ((CachedMob<?,?>) entity).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
                 cache.newSense(world, mob);
                 ci.cancel();
@@ -33,7 +33,7 @@ public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
         if (entity instanceof CachedMob<?,?> m) {
             final var b = m.toobee$getCache();
             if (b == null)
-                m.toobee$checkToCreateCache(list, world, entity.getBlockPos());
+                m.toobee$getCacheManager().checkToCreate(world, entity.getBlockPos(), list);
             else
                 b.setTrackers(list);
         }

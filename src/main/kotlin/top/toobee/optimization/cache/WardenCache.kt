@@ -7,13 +7,14 @@ import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.WardenEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
 
 class WardenCache private constructor(
-    world: ServerWorld,
+    world: World,
     pos: BlockPos,
 ): StackingMobCache<WardenEntity>(world, pos) {
     companion object: Caches<WardenEntity, WardenCache>(WardenEntity::class.java) {
-        override fun create(world: ServerWorld, pos: BlockPos): WardenCache = WardenCache(world, pos)
+        override fun create(world: World, pos: BlockPos): WardenCache = WardenCache(world, pos)
     }
 
     var angerAtTarget: Int = 0

@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.BeCached;
 import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.PiglinCache;
 
@@ -22,8 +21,7 @@ public abstract class PiglinSpecificSensorMixin {
     @Inject(method = "sense", at = @At("HEAD"), cancellable = true)
     public void head(final ServerWorld world, final LivingEntity entity, final CallbackInfo ci) {
         if (entity instanceof PiglinEntity piglin) {
-            @SuppressWarnings("unchecked")
-            final var cache = ((BeCached<PiglinCache>) piglin).toobee$getCache();
+            final var cache = ((CachedMob<?,?>) piglin).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
                 cache.newSense(world, piglin);
                 ci.cancel();
@@ -35,8 +33,7 @@ public abstract class PiglinSpecificSensorMixin {
     public void tail(final ServerWorld world, final LivingEntity entity, final CallbackInfo ci,
                      @Local final Brain<PiglinEntity> brain, @Local(ordinal = 1) final List<AbstractPiglinEntity> list) {
         if (entity instanceof PiglinEntity piglin) {
-            @SuppressWarnings("unchecked")
-            final var b = (CachedMob<PiglinEntity, PiglinCache>) piglin;
+            final var b = (CachedMob<?,?>) piglin;
             if (b.toobee$getCache() instanceof PiglinCache cache)
                 cache.reset(brain);
         }

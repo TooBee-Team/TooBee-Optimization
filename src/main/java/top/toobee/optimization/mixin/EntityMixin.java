@@ -12,6 +12,6 @@ public abstract class EntityMixin {
     @Inject(method = "setRemoved", at = @At("HEAD"))
     public final void setRemoved(Entity.RemovalReason reason, CallbackInfo ci) {
         if (this instanceof BeCached<?> b)
-            b.toobee$updateCache(null);
+            b.toobee$removeCache();
     }
 }

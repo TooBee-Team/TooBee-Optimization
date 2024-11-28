@@ -61,7 +61,7 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
         super.tick()
         this.shouldRunMoveToTargetTask = null
         this.supportingBlockPos = Optional.empty()
-        this.supportingBlockPos = Optional.empty()
+        this.nearestTarget = null
         this.recheckUpdate.set(false)
     }
 
@@ -75,10 +75,10 @@ abstract class StackingMobCache<T: MobEntity> protected constructor(
 
         fun values() = this.all.values
 
-        fun checkToCreate(target: CachedMob<T, S>, world: ServerWorld, pos: BlockPos, list: List<*>) {
+        fun checkToCreate(world: ServerWorld, pos: BlockPos, list: List<*>) {
             val count = list.filterIsInstance(cls).count { e -> e.blockPos == pos && e.world === world }
             if (count and MIN_CACHE_SIZE_MASKED != 0)
-                target.`toobee$updateCache`(all.computeIfAbsent(world to pos) { this.create(world, pos) })
+                all.computeIfAbsent(world to pos) { this.create(world, pos) }
         }
 
         protected abstract fun create(world: ServerWorld, pos: BlockPos): S

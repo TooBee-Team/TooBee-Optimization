@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.mob.WardenEntity
 import net.minecraft.server.MinecraftServer
+import top.toobee.optimization.cache.PiglinCache
 import top.toobee.optimization.cache.WardenCache
 import top.toobee.optimization.mixin.EntityClassGroupAccessor
 
@@ -21,6 +22,7 @@ class Optimization : DedicatedServerModInitializer {
 
         ServerTickEvents.START_SERVER_TICK.register {
             WardenCache.values().forEach { it.tick() }
+            PiglinCache.values().forEach { it.tick() }
         }
     }
 }

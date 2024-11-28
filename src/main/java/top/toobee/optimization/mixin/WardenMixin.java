@@ -3,7 +3,6 @@ package top.toobee.optimization.mixin;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.WardenAngerManager;
 import net.minecraft.entity.mob.WardenEntity;
-import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -13,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.toobee.optimization.cache.CachedMob;
+import top.toobee.optimization.cache.StackingMobCache;
 import top.toobee.optimization.cache.WardenCache;
 
 @Mixin(WardenEntity.class)
@@ -22,7 +22,6 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
 
     @Shadow
     WardenAngerManager angerManager;
-
 
     @Shadow
     @Nullable
@@ -36,6 +35,11 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
     @Override
     public void toobee$setCache(WardenCache cache) {
         this.cache = cache;
+    }
+
+    @Override
+    public StackingMobCache.Caches<WardenEntity, WardenCache> toobee$getCacheManager() {
+        return WardenCache.Companion;
     }
 
     /**
@@ -60,9 +64,7 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickHead(CallbackInfo ci) {
-        final var self = (WardenEntity) (Object) this;
-        if (this.cache == null || !this.cache.checkCondition(self))
-            this.toobee$updateCache(WardenCache.Companion.findCache((ServerWorld) self.getWorld(), self.getBlockPos()));
+        this.toobee$updateCache((WardenEntity) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

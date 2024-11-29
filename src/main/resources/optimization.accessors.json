@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "top.toobee.optimization.accessor",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EntityClassGroupAccessor",
+    "MobEntityAccessor"
+  ]
+}

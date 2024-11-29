@@ -13,7 +13,7 @@ class WardenCache private constructor(
     world: World,
     pos: BlockPos,
 ): StackingMobCache<WardenEntity>(world, pos) {
-    companion object: Caches<WardenEntity, WardenCache>(WardenEntity::class.java) {
+    companion object : Caches<WardenEntity, WardenCache>(WardenEntity::class.java) {
         override fun create(world: World, pos: BlockPos): WardenCache = WardenCache(world, pos)
     }
 

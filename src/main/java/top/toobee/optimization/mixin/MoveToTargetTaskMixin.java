@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.StackingMobCache;
+import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(MoveToTargetTask.class)
 public abstract class MoveToTargetTaskMixin {

@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.PiglinCache;
+import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(PiglinSpecificSensor.class)
 public abstract class PiglinSpecificSensorMixin {

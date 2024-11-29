@@ -1,6 +1,7 @@
-package top.toobee.optimization.cache;
+package top.toobee.optimization.intermediary;
 
 import net.minecraft.entity.mob.MobEntity;
+import top.toobee.optimization.cache.StackingMobCache;
 
 public interface CachedMob<T extends MobEntity, S extends StackingMobCache<T>> extends BeCached<S> {
     StackingMobCache.Caches<T, S> toobee$getCacheManager();

@@ -6,9 +6,9 @@ import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.cache.StackingMobCache;
+import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(PiglinEntity.class)
 public abstract class PiglinMixin extends Entity implements CachedMob<PiglinEntity, PiglinCache> {

@@ -7,8 +7,8 @@ import net.minecraft.world.CollisionView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.StackingMobCache;
+import top.toobee.optimization.intermediary.CachedMob;
 
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ public abstract class WorldMixin implements CollisionView {
         return CollisionView.super.findSupportingBlockPos(entity, box);
     }
 
-    // Wait for modify
+    // Wait for completing
     @Unique
     @SuppressWarnings({"OptionalUsedAsFieldOrParameterType"})
     private static boolean toobee$check(final Optional<BlockPos> p, final Box box) {

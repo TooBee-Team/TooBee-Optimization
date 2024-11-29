@@ -11,7 +11,11 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import top.toobee.optimization.accessor.MobEntityAccessor
+import top.toobee.optimization.intermediary.DataTrackerIntermediary
 import java.util.Optional
+import kotlin.experimental.and
+import kotlin.experimental.or
 
 @Suppress("PrivatePropertyName")
 class PiglinCache private constructor(
@@ -20,6 +24,10 @@ class PiglinCache private constructor(
 ): StackingMobCache<PiglinEntity>(world, pos) {
     companion object : Caches<PiglinEntity, PiglinCache>(PiglinEntity::class.java) {
         override fun create(world: World, pos: BlockPos): PiglinCache = PiglinCache(world, pos)
+
+        // This is initially placed in DataTrackerMixin,
+        // but there appears error when loading entities.
+        @JvmStatic val MOB_FLAGS_ID = MobEntityAccessor.getMobFlags().id()
     }
 
     override fun truncate() {
@@ -66,5 +74,21 @@ class PiglinCache private constructor(
         this.NEAREST_VISIBLE_ADULT_PIGLINS = brian.getOptionalRegisteredMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS)
         this.VISIBLE_ADULT_PIGLIN_COUNT = brian.getOptionalRegisteredMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT)
         this.VISIBLE_ADULT_HOGLIN_COUNT = brian.getOptionalRegisteredMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT)
+    }
+
+    private var changeAttacking: Boolean = false
+
+    fun redirectAttacking(instance: PiglinEntity, attacking: Boolean) {
+        if (this.hasUpdatedThisTick) {
+            // Accelerate setAttacking by implement specially
+            if (this.changeAttacking) {
+                val t = instance.dataTracker as DataTrackerIntermediary
+                val b = t.`toobee$getMobFlags`()
+                t.`toobee$setMobFlags`(if (attacking) b or 4 else b and -5)
+            }
+        } else {
+            this.changeAttacking = instance.isAttacking != attacking
+            instance.isAttacking = attacking
+        }
     }
 }

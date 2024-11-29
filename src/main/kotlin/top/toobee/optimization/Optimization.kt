@@ -5,7 +5,7 @@ import net.fabricmc.api.DedicatedServerModInitializer
 import net.minecraft.entity.mob.WardenEntity
 import top.toobee.optimization.cache.PiglinCache
 import top.toobee.optimization.cache.WardenCache
-import top.toobee.optimization.mixin.EntityClassGroupAccessor
+import top.toobee.optimization.accessor.EntityClassGroupAccessor
 
 class Optimization : DedicatedServerModInitializer {
     companion object {
@@ -14,6 +14,7 @@ class Optimization : DedicatedServerModInitializer {
             PiglinCache.tick()
         }
     }
+
     override fun onInitializeServer() {
         (PushableEntityClassGroup.MAYBE_PUSHABLE as EntityClassGroupAccessor).class2GroupContains.addTo(WardenEntity::class.java, 1)
         (PushableEntityClassGroup.CACHABLE_UNPUSHABILITY as EntityClassGroupAccessor).class2GroupContains.addTo(WardenEntity::class.java, 1)

@@ -11,8 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.ReentrantLock
 
-const val MIN_CACHE_SIZE_MASKED = Int.MAX_VALUE - 0b1111
-
 abstract class StackingMobCache<T : MobEntity> protected constructor(
     final override val world: World,
     val pos: BlockPos,
@@ -77,7 +75,7 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
 
         fun checkToCreate(world: World, pos: BlockPos, list: List<*>) {
             val count = list.filterIsInstance(cls).count { e -> e.blockPos == pos && e.world === world }
-            if (count and MIN_CACHE_SIZE_MASKED != 0)
+            if (count and Int.MAX_VALUE - 0b1111 != 0)
                 all.computeIfAbsent(world to pos) { this.create(world, pos) }
         }
 

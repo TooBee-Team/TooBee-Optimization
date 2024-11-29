@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.CachedMob;
+import top.toobee.optimization.intermediary.CachedMob;
 
 import java.util.List;
 

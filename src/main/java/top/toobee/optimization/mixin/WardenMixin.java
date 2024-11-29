@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.CachedMob;
 import top.toobee.optimization.cache.StackingMobCache;
 import top.toobee.optimization.cache.WardenCache;
+import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(WardenEntity.class)
 public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache> {

@@ -30,6 +30,7 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
 
     var shouldRunMoveToTargetTask: Boolean? = null
     var supportingBlockPos: Optional<BlockPos> = Optional.empty()
+    var lookAtMobTaskEntity: Optional<LivingEntity> = Optional.empty()
     var trackers: List<LivingEntity> = emptyList()
         set (value) {
             if (!this.recheckUpdate.get() && this.lock.tryLock()) {
@@ -59,6 +60,7 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
         super.tick()
         this.shouldRunMoveToTargetTask = null
         this.supportingBlockPos = Optional.empty()
+        this.lookAtMobTaskEntity = Optional.empty()
         this.nearestTarget = null
         this.recheckUpdate.set(false)
     }

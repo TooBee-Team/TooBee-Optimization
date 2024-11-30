@@ -41,5 +41,13 @@ public abstract class WorldMixin implements CollisionView {
         int x = p.get().getX(), z = p.get().getZ();
         return  x <= (int) box.minX && (int) Math.ceil(box.maxX) <= ++x &&
                 z <= (int) box.minZ && (int) Math.ceil(box.maxZ) <= ++z;
+
+//        Box box = this.getBoundingBox().contract(0.001);
+//        int i = MathHelper.floor(box.minX);
+//        int j = MathHelper.ceil(box.maxX);
+//        int k = MathHelper.floor(box.minY);
+//        int l = MathHelper.ceil(box.maxY);
+//        int m = MathHelper.floor(box.minZ);
+//        int n = MathHelper.ceil(box.maxZ);
     }
 }

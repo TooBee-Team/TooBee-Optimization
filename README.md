@@ -41,3 +41,9 @@ More precisely, these mobs are recommended to:
 ### Affected Mob
 - **Warden**: usually for pseudo-peace farm in server.
 - **Piglin**: usually for bartering farm.
+
+### Principle and Attention
+Cache the calculation results of such mobs every tick:
+One mob experience a full calculation process and cache the result, while others stacking in the same position share it.
+In this way, original behaviour of mobs stacking in one block are slightly affected,
+but not so much and most people don't care about it, as hardly any player interact with these thousands of entities.

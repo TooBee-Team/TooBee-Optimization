@@ -6,11 +6,12 @@
   "mixins": [
     "DataTrackerMixin",
     "EntityMixin",
+    "LookAtMobTaskMixin",
     "MinecraftServerMixin",
     "MoveToTargetTaskMixin",
     "NearestLivingEntitiesSensorMixin",
-    "PiglinMixin",
     "PiglinBrainMixin",
+    "PiglinMixin",
     "PiglinSpecificSensorMixin",
     "WardenAttackablesSensorMixin",
     "WardenMixin",

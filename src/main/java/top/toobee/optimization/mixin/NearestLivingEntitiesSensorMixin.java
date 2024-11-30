@@ -15,7 +15,9 @@ import java.util.List;
 
 @Mixin(NearestLivingEntitiesSensor.class)
 public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
-    @Inject(method = "sense", at = @At("HEAD"), cancellable = true)
+    // Some mods might inject at the head of this as well,
+    // mine should be with higher priority to cutoff as much calculation as possible.
+    @Inject(method = "sense", at = @At("HEAD"), cancellable = true, order = 900)
     public void head(final ServerWorld world, final T entity, final CallbackInfo ci) {
         // The implementation of warden is moved to WardenAttackablesSensorMixin
         // Wait for completing more

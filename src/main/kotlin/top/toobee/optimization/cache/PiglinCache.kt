@@ -1,5 +1,6 @@
 package top.toobee.optimization.cache
 
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.brain.Brain
 import net.minecraft.entity.ai.brain.MemoryModuleType
@@ -8,11 +9,13 @@ import net.minecraft.entity.mob.HoglinEntity
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.PiglinEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Items
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import top.toobee.optimization.accessor.MobEntityAccessor
 import top.toobee.optimization.intermediary.DataTrackerIntermediary
+import top.toobee.optimization.util.prioritize
 import java.util.Optional
 import kotlin.experimental.and
 import kotlin.experimental.or
@@ -33,6 +36,10 @@ class PiglinCache private constructor(
     override fun truncate() {
         super.truncate()
         all.remove(this.world to this.pos)
+    }
+
+    override fun checkCondition(t: PiglinEntity): Boolean {
+        return super.checkCondition(t) && !t.isBaby
     }
 
     private var NEAREST_REPELLENT = Optional.empty<BlockPos>()
@@ -77,6 +84,13 @@ class PiglinCache private constructor(
     }
 
     private var changeAttacking: Boolean = false
+    var nearestItems: List<ItemEntity> = emptyList()
+        set(value) {
+            field = value
+                .filter { it.pos.isInRange(this.pos.toCenterPos(), 32.0) }
+                .prioritize { it.stack.isOf(Items.GOLD_INGOT) && it.blockPos == this.pos }
+        }
+    var canPickUpItems: List<ItemEntity> = emptyList()
 
     fun redirectAttacking(instance: PiglinEntity, attacking: Boolean) {
         if (this.hasUpdatedThisTick) {
@@ -90,5 +104,12 @@ class PiglinCache private constructor(
             this.changeAttacking = instance.isAttacking != attacking
             instance.isAttacking = attacking
         }
+    }
+
+    fun getNearestItem(world: ServerWorld, piglin: PiglinEntity): Optional<ItemEntity> {
+        for (item in this.nearestItems)
+            if (piglin.canGather(world, item.stack) && piglin.canSee(item))
+                return Optional.of(item)
+        return Optional.empty()
     }
 }

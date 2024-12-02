@@ -53,7 +53,7 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
         }
 
     override fun checkCondition(t: T): Boolean {
-        return t.blockPos == this.pos && t.world === this.world
+        return t.blockPos == this.pos && t.world === this.world && t.isAlive
     }
 
     override fun tick() {

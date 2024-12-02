@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 
 @Mixin(LookAtMobTask.class)
 public abstract class LookAtMobTaskMixin {
-    @Redirect(method = "method_47063", at = @At(args = "entity", value = "INVOKE",
+    @Redirect(method = "method_47063", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/ai/brain/LivingTargetCache;findFirst(Ljava/util/function/Predicate;)Ljava/util/Optional;"))
     private static Optional<LivingEntity> redirect(
             LivingTargetCache instance,

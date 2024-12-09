@@ -27,12 +27,14 @@ public abstract class NearestItemsSensorMixin {
 
     @Inject(method = SENSE, cancellable = true, at = @At("HEAD"))
     protected void head(ServerWorld world, MobEntity entity, CallbackInfo ci, @Share("cache") LocalRef<PiglinCache> c) {
-        final PiglinCache cache;
-        if (entity instanceof PiglinEntity piglin && (cache = ((CachedPiglin) piglin).toobee$getCache()) != null) {
-            c.set(cache);
-            if (!cache.getHasUpdatedThisTick()) {
-                entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
-                ci.cancel();
+        if (entity instanceof PiglinEntity piglin) {
+            final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
+            if (cache != null) {
+                c.set(cache);
+                if (cache.getHasUpdatedThisTick()) {
+                    entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
+                    ci.cancel();
+                }
             }
         }
     }

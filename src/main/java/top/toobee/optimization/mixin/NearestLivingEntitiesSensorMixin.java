@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.toobee.optimization.intermediary.CachedMob;
+import top.toobee.optimization.intermediary.CachedPiglin;
 
 import java.util.List;
 
@@ -22,9 +23,9 @@ public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
         // The implementation of warden is moved to WardenAttackablesSensorMixin
         // Wait for completing more
         if (entity instanceof PiglinEntity mob) {
-            final var cache = ((CachedMob<?,?>) entity).toobee$getCache();
+            final var cache = ((CachedPiglin) entity).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
-                cache.newSense(world, mob);
+                cache.senseNearestLivingEntities(world, mob);
                 ci.cancel();
             }
         }

@@ -15,13 +15,13 @@ import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(WardenAttackablesSensor.class)
 public abstract class WardenAttackablesSensorMixin {
-    @Unique
-    private static final String TARGET_METHOD
+    @Unique private static final String TARGET_METHOD
             = "sense(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/mob/WardenEntity;)V";
 
     @Inject(method = TARGET_METHOD, at = @At("HEAD"), cancellable = true)
     public void head(final ServerWorld serverWorld, final WardenEntity warden, final CallbackInfo ci) {
-        final var cache = ((CachedMob<?,?>) warden).toobee$getCache();
+        @SuppressWarnings("unchecked")
+        final var cache = ((CachedMob<WardenEntity, WardenCache>) warden).toobee$getCache();
         if (cache != null && cache.getHasUpdatedThisTick()) {
             cache.newSense(serverWorld, warden);
             ci.cancel();

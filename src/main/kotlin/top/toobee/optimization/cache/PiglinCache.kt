@@ -24,7 +24,7 @@ import kotlin.experimental.or
 class PiglinCache private constructor(
     world: World,
     pos: BlockPos,
-): StackingMobCache<PiglinEntity>(world, pos) {
+) : StackingMobCache<PiglinEntity>(world, pos) {
     companion object : Caches<PiglinEntity, PiglinCache>(PiglinEntity::class.java) {
         override fun create(world: World, pos: BlockPos): PiglinCache = PiglinCache(world, pos)
 
@@ -54,7 +54,7 @@ class PiglinCache private constructor(
     private var VISIBLE_ADULT_PIGLIN_COUNT = Optional.empty<Int>()
     private var VISIBLE_ADULT_HOGLIN_COUNT = Optional.empty<Int>()
 
-    override fun newSense(world: ServerWorld, entity: MobEntity) {
+    override fun newSense(world: ServerWorld, entity: PiglinEntity) {
         val brain = entity.brain
         brain.remember(MemoryModuleType.NEAREST_REPELLENT, this.NEAREST_REPELLENT)
         brain.remember(MemoryModuleType.NEAREST_VISIBLE_NEMESIS, this.NEAREST_VISIBLE_NEMESIS)

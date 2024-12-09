@@ -12,13 +12,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.intermediary.CachedMob;
+import top.toobee.optimization.intermediary.CachedPiglin;
 
 @Mixin(PiglinSpecificSensor.class)
 public abstract class PiglinSpecificSensorMixin {
     @Inject(method = "sense", at = @At("HEAD"), cancellable = true)
     public void head(final ServerWorld world, final LivingEntity entity, final CallbackInfo ci) {
         if (entity instanceof PiglinEntity piglin) {
-            final var cache = ((CachedMob<?,?>) piglin).toobee$getCache();
+            final var cache = ((CachedPiglin) piglin).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
                 cache.newSense(world, piglin);
                 ci.cancel();

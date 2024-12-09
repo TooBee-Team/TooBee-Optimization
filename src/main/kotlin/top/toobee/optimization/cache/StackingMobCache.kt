@@ -1,11 +1,13 @@
 package top.toobee.optimization.cache
 
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.ai.brain.LivingTargetCache
+import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.Optional
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -14,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock
 abstract class StackingMobCache<T : MobEntity> protected constructor(
     final override val world: World,
     val pos: BlockPos,
-): AttachedCache<T> {
+) : AttachedCache<T> {
     override val referencedCounter = AtomicInteger(0)
     override val lock = ReentrantLock()
     override var lastUpdateTick = this.world.time
@@ -65,7 +67,12 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
         this.recheckUpdate.set(false)
     }
 
-    abstract fun newSense(world: ServerWorld, entity: MobEntity)
+    fun senseNearestLivingEntities(world: ServerWorld, t: T) {
+        t.brain.remember(MemoryModuleType.MOBS, this.trackers)
+        t.brain.remember(MemoryModuleType.VISIBLE_MOBS, LivingTargetCache(world, t, this.trackers))
+    }
+
+    abstract fun newSense(world: ServerWorld, entity: T)
 
     abstract class Caches<T : MobEntity, S : StackingMobCache<T>> protected constructor(
         private val cls: Class<T>,

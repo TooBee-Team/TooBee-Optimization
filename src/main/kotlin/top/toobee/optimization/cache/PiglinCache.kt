@@ -34,7 +34,6 @@ class PiglinCache private constructor(
     }
 
     override fun truncate() {
-        super.truncate()
         all.remove(this.world to this.pos)
     }
 

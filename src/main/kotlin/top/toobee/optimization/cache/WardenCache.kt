@@ -17,7 +17,6 @@ class WardenCache private constructor(
     var angerAtTarget: Int = 0
 
     override fun truncate() {
-        super.truncate()
         all.remove(this.world to this.pos)
     }
 

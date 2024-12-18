@@ -9,7 +9,7 @@ import top.toobee.optimization.accessor.EntityClassGroupAccessor
 
 class Optimization : DedicatedServerModInitializer {
     companion object {
-        fun endServerTick() {
+        fun startServerTick() {
             WardenCache.tick()
             PiglinCache.tick()
         }

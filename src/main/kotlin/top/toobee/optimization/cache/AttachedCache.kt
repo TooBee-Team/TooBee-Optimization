@@ -40,17 +40,21 @@ interface AttachedCache<T> {
     /**
      * When the cache is dropped, do some clear tasks.
      */
-    fun truncate() {}
+    fun truncate()
 
     /**
      * Run every end of tick to reset some variables.
      */
     fun tick() {
         if (this.lastUpdateTick != this.world.time) {
-            this.lastUpdateTick = this.world.time
-            if (this.referencedCounter.get() == 0)
+            if (this.hasUpdatedThisTick) {
+                this.hasUpdatedThisTick = false
+                this.lastUpdateTick = this.world.time
+            } else if ((this.world.time - this.lastUpdateTick) ushr 8 != 0L) {
                 this.truncate()
-            hasUpdatedThisTick = false
+            }
+            if (this.referencedCounter.get() ushr 4 == 0)
+                this.truncate()
         }
     }
 }

@@ -1,6 +1,7 @@
 # TooBee Optimization
 
-This project is a public minecraft optimization mod for TooBee survival server.
+This project is a public minecraft optimization mod for TooBee survival server,
+including a variety of aspects where each one is designed for a specific occasion.
 
 The mod is in a very early stage of development, and notice that it is a dedicated server only mod.
 
@@ -24,26 +25,48 @@ Keep following mods as newest as possible.
 - Lithium
 
 ## What has been done
+
 Most modifications are ensure to be thread safe.
+
+### Mob Stacking Optimization
 
 Cache some of the calculation results of vast amount of certain entities stacking in a single position.
 I try to optimize the time complexity of such calculation from $O(n^2\log n)$ to $O(n)$,
 which means the MSPT caused by 3000 wardens can be reduced from more than 700 to less than 15.
 However, notice that this mod is server only, so it should be no use on client side. 
 
-More precisely, these mobs are recommended to:
+#### These mobs are recommended to
 - be the same type;
 - stack in the same dimension and block pos;
 - stand on a solid block steadily;
 - have limited mobility;
 - with climbable block in the position of their feet so that they don't crush.
 
-### Affected Mob
+#### Affected Mob
 - **Warden**: usually for pseudo-peace farm in server.
 - **Piglin**: usually for bartering farm.
 
-### Principle and Attention
+#### Principle and Attention
 Cache the calculation results of such mobs every tick:
 One mob experience a full calculation process and cache the result, while others stacking in the same position share it.
 In this way, original behaviour of mobs stacking in one block are slightly affected,
 but not so much and most people don't care about it, as hardly any player interact with these thousands of entities.
+
+### More reasonable despawn condition
+
+If mobs pickup items, they keep alive permanently unless killed.
+However, those mobs are not counted into spawn cap, making their population grows endlessly and finally causes huge lags.
+While a hostile mob hold the following common items without any components, it will still despawn:
+
+arrow, bone, brown mushroom, cobbled deepslate, cobblestone, dirt, egg, grass block, gravel, gunpowder,
+pointed dripstone, red mushroom, rotten flesh, spider eye, string, torch, wheat seeds.
+
+## Plan
+
+- [ ] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
+- [ ] Make the enderman holding certain blocks despawn. *(It's a little bit different from other hostile mobs)*
+- [ ] Stacking shulkers optimization.
+- [ ] Stacking whithers optimization.
+- [ ] Reduce the calculation of spawning condition checking when pseudo-peace farm is running.
+- [ ] A high speed moving player loads fewer chunks, in oven shape more precisely.
+- [ ] (Quite hard) Optimize iron man farmer with more than six thousand villagers.

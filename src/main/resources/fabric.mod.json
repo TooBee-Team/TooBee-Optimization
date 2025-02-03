@@ -6,7 +6,7 @@
   "description": "Public optimization mod for TooBee server",
   "authors": ["Fungus"],
   "contact": {
-    "homepage": "https://2ob.top"
+    "homepage": "https://toobee.top"
   },
   "license": "GPL-3.0",
   "environment": "server",
@@ -22,7 +22,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-language-kotlin": ">=${kotlin_loader_version}",
-    "minecraft": "${minecraft_version}",
-    "lithium": ">=0.14.0"
+    "minecraft": ">=${minecraft_version}",
+    "lithium": ">=0.14.7"
   }
 }

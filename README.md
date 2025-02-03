@@ -12,10 +12,10 @@ TooBee is a Chinese original survival server belonging to HaoRenFu.
 
 The version of server equals to this latest minecraft version of this mod.
 
-- Server IP: `2ob.top:59522`
-- Website (Temporarily not open): www.2ob.top
+- Server IP: `2ob.top`
+- Website: https://toobee.top
 - QQ group: 786296062
-- [Discord](https://discord.gg/r4eztFe5)
+- [Discord](https://discord.gg/YcJVpVKe8q)
 
 ## Mod Dependencies
 Keep following mods as newest as possible.

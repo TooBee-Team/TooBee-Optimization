@@ -5,7 +5,6 @@ import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,17 +37,17 @@ public abstract class PiglinBrainMixin {
     private static void canGather(PiglinEntity piglin, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         final var p = (CachedPiglin) piglin;
         if (p.toobee$getCache() != null) {
-            if (p.toobee$hasNotBeenHitByPlayer() && stack.isOf(Items.GOLD_INGOT))
+            if (p.toobee$hasNotBeenHitByPlayer() && stack.isOf(PiglinBrain.BARTERING_ITEM))
                 cir.setReturnValue(doesNotHaveGoldInOffHand(piglin));
             else
-                p.toobee$setHasNotBeenHitByPlayer(piglin.getBrain().hasMemoryModule(MemoryModuleType.ADMIRING_DISABLED));
+                p.toobee$setHasNotBeenHitByPlayer(!piglin.getBrain().hasMemoryModule(MemoryModuleType.ADMIRING_DISABLED));
         }
     }
 
     @Redirect(method = "doesNotHaveGoldInOffHand", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/mob/PiglinBrain;isGoldenItem(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean isGoldenItem(ItemStack stack) {
-        return stack.isOf(Items.GOLD_INGOT) || stack.isIn(ItemTags.PIGLIN_LOVED);
+        return stack.isOf(PiglinBrain.BARTERING_ITEM) || stack.isIn(ItemTags.PIGLIN_LOVED);
     }
 
     @Inject(method = "onAttacked", at = @At(value = "INVOKE",

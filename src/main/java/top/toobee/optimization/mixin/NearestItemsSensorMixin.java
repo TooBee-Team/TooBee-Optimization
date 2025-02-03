@@ -13,10 +13,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.toobee.optimization.accessor.PiglinBrainInvoker;
 import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.minecraft.entity.ai.brain.MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM;
 
@@ -28,13 +30,18 @@ public abstract class NearestItemsSensorMixin {
     @Inject(method = SENSE, cancellable = true, at = @At("HEAD"))
     protected void head(ServerWorld world, MobEntity entity, CallbackInfo ci, @Share("cache") LocalRef<PiglinCache> c) {
         if (entity instanceof PiglinEntity piglin) {
-            final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
-            if (cache != null) {
-                c.set(cache);
-                if (cache.getHasUpdatedThisTick()) {
-                    entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
-                    ci.cancel();
+            if (PiglinBrainInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()) {
+                final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
+                if (cache != null) {
+                    c.set(cache);
+                    if (cache.getNearestItems() != null) {
+                        entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
+                        ci.cancel();
+                    }
                 }
+            } else {
+                entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, Optional.empty());
+                ci.cancel();
             }
         }
     }
@@ -43,11 +50,14 @@ public abstract class NearestItemsSensorMixin {
             at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V", shift = At.Shift.AFTER))
     protected void sort(ServerWorld world, MobEntity entity, CallbackInfo ci,
                         @Share("cache") LocalRef<PiglinCache> c, @Local List<ItemEntity> list) {
-        final PiglinCache cache = c.get();
-        if (cache != null) {
-            cache.setNearestItems(list);
-            entity.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, (PiglinEntity) entity));
-            ci.cancel();
+        if (entity instanceof PiglinEntity piglin) {
+            final PiglinCache cache = c.get();
+            if (cache != null && PiglinBrainInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()
+                    && ((CachedPiglin) piglin).toobee$hasNotBeenHitByPlayer()) {
+                cache.setNearestItems(list);
+                piglin.getBrain().remember(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
+                ci.cancel();
+            }
         }
     }
 }

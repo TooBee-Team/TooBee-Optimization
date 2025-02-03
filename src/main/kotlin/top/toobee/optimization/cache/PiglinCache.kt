@@ -7,9 +7,9 @@ import net.minecraft.entity.ai.brain.MemoryModuleType
 import net.minecraft.entity.mob.AbstractPiglinEntity
 import net.minecraft.entity.mob.HoglinEntity
 import net.minecraft.entity.mob.MobEntity
+import net.minecraft.entity.mob.PiglinBrain
 import net.minecraft.entity.mob.PiglinEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Items
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -83,11 +83,10 @@ class PiglinCache private constructor(
     }
 
     private var changeAttacking: Boolean = false
-    var nearestItems: List<ItemEntity> = emptyList()
+    var nearestItems: List<ItemEntity>? = null
         set(value) {
-            field = value
-                .filter { it.pos.isInRange(this.pos.toCenterPos(), 32.0) }
-                .prioritize { it.stack.isOf(Items.GOLD_INGOT) && it.blockPos == this.pos }
+            field = value?.filter { it.pos.isInRange(this.pos.toCenterPos(), 32.0) }
+                ?.prioritize { it.stack.isOf(PiglinBrain.BARTERING_ITEM) && it.blockPos == this.pos }
         }
     var canPickUpItems: List<ItemEntity> = emptyList()
 
@@ -106,9 +105,14 @@ class PiglinCache private constructor(
     }
 
     fun getNearestItem(world: ServerWorld, piglin: PiglinEntity): Optional<ItemEntity> {
-        for (item in this.nearestItems)
+        for (item in this.nearestItems?: emptyList())
             if (piglin.canGather(world, item.stack) && piglin.canSee(item))
                 return Optional.of(item)
         return Optional.empty()
+    }
+
+    override fun tick() {
+        super.tick()
+        this.nearestItems = null
     }
 }

@@ -18,12 +18,13 @@ public abstract class MoveToTargetTaskMixin {
 
     @Inject(method = "hasFinishedPath", cancellable = true, at = @At("HEAD"))
     public void hasFinishedPathHead(MobEntity entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof CachedMob<?,?> beCached)
+        if (entity instanceof CachedMob<?,?> beCached) {
             this.cache = beCached.toobee$getCache();
-        if (this.cache != null) {
-            final Boolean y = this.cache.getShouldRunMoveToTargetTask();
-            if (y != null)
-                cir.setReturnValue(y);
+            if (this.cache != null) {
+                final Boolean y = this.cache.getShouldRunMoveToTargetTask();
+                if (y != null)
+                    cir.setReturnValue(y);
+            }
         }
     }
 

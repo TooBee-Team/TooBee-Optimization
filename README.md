@@ -86,7 +86,7 @@ pointed dripstone, red mushroom, rotten flesh, spider eye, string, torch, wheat 
 ## Plan
 
 - [x] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
-- [ ] Compatibility with [Sepals](https://github.com/AxalotLDev/Async) Mod.
+- [ ] Compatibility with [Async](https://github.com/AxalotLDev/Async) Mod.
 - [ ] Make the enderman holding certain blocks despawn. *(It's a little bit different from other hostile mobs)*
 - [ ] Stacking shulkers optimization.
 - [ ] Stacking whithers optimization.

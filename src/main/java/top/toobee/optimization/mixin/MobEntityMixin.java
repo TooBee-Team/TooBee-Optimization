@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class MobEntityMixin {
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/World;getNonSpectatingEntities(Ljava/lang/Class;Lnet/minecraft/util/math/Box;)Ljava/util/List;"))
-    public List<ItemEntity> getStackingEntities (World instance, Class<ItemEntity> entityClass, Box box){
+    public List<ItemEntity> getStackingEntities(World instance, Class<ItemEntity> entityClass, Box box) {
         if (this instanceof CachedPiglin p) {
             final var c = p.toobee$getCache();
             if (c != null) {

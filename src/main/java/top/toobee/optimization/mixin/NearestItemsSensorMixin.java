@@ -46,8 +46,9 @@ public abstract class NearestItemsSensorMixin {
         }
     }
 
+    // Wait for more accurate detection
     @Inject(method = SENSE, cancellable = true,
-            at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V", shift = At.Shift.AFTER))
+            at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V", shift = At.Shift.AFTER, remap = false))
     protected void sort(ServerWorld world, MobEntity entity, CallbackInfo ci,
                         @Share("cache") LocalRef<PiglinCache> c, @Local List<ItemEntity> list) {
         if (entity instanceof PiglinEntity piglin) {

@@ -9,6 +9,7 @@ Support for the newest minecraft is updated if and only if TooBee server updates
 and yet older version of minecraft is not supported.
 
 ## About TooBee Server
+
 TooBee is a Chinese original survival server belonging to HaoRenFu.
 
 The version of server equals to this latest minecraft version of this mod.
@@ -19,10 +20,31 @@ The version of server equals to this latest minecraft version of this mod.
 - [Discord](https://discord.gg/YcJVpVKe8q)
 
 ## Mod Dependencies
-Keep following mods as newest as possible.
+
+Keep following mods as newest as possible, they are required.
 
 - Fabric Language Kotlin
 - Lithium
+
+### Compatibility
+
+TooBee Optimization are tested to be compatible with the following optimization mods.
+
+- [C2ME](https://github.com/RelativityMC/C2ME-fabric)
+- [Carpet](https://github.com/gnembon/fabric-carpet)
+- [Chlorophyll](https://github.com/CyanidinMC/Chlorophyll)
+- [FerriteCore](https://github.com/malte0811/FerriteCore)
+- [Lithium](https://github.com/CaffeineMC/lithium) (Required)
+- [ModernFix](https://github.com/embeddedt/ModernFix)
+- [Moonrise](https://github.com/Tuinity/Moonrise)
+- [Noisium](https://github.com/Steveplays28/noisium)
+- [ScalableLux](https://github.com/RelativityMC/ScalableLux)
+- [Sepals](https://github.com/cao-awa/Sepals) (Targeted compatibility measure has been made)
+- [ServerCore](https://github.com/Wesley1808/ServerCore)
+- [WorldThreader](https://github.com/2No2Name/worldthreader)
+- [VMP](https://github.com/RelativityMC/VMP-fabric)
+
+[Async](https://github.com/AxalotLDev/Async) is planned to be supported in the future. I have to ensure enough thread safety.
 
 ## What has been done
 
@@ -63,7 +85,8 @@ pointed dripstone, red mushroom, rotten flesh, spider eye, string, torch, wheat 
 
 ## Plan
 
-- [ ] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
+- [x] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
+- [ ] Compatibility with [Sepals](https://github.com/AxalotLDev/Async) Mod.
 - [ ] Make the enderman holding certain blocks despawn. *(It's a little bit different from other hostile mobs)*
 - [ ] Stacking shulkers optimization.
 - [ ] Stacking whithers optimization.

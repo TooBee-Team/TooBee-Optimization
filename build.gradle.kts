@@ -33,6 +33,7 @@ loom {
 
 repositories {
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.bawnorton.com/releases")
 }
 
 dependencies {
@@ -42,6 +43,9 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.property("kotlin_loader_version")}")
     modImplementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
+
+    annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.property("mixin_squared_version")}")
+        ?.let { implementation(it) }?.let { include(it) }
     //modImplementation(fabricApi.module("fabric-lifecycle-events-v1", project.property("fabric_version") as String))
 }
 

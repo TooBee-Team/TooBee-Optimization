@@ -83,7 +83,7 @@ abstract class StackingMobCache<T : MobEntity> protected constructor(
         fun tick() = this.all.values.forEach { it.tick() }
 
         fun checkToCreate(world: World, pos: BlockPos, list: List<*>) {
-            val count = list.filterIsInstance(cls).count { e -> e.blockPos == pos && e.world === world }
+            val count = list.filterIsInstance(cls).count { it.blockPos == pos && it.world === world }
             if (count ushr 4 != 0)
                 all.computeIfAbsent(world to pos) { this.create(world, pos) }
         }

@@ -23,7 +23,6 @@ The version of server equals to this latest minecraft version of this mod.
 
 Keep following mods as newest as possible, they are required.
 
-- Fabric Language Kotlin
 - Lithium
 
 ### Compatibility

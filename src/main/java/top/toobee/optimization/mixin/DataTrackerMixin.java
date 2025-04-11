@@ -15,7 +15,7 @@ public abstract class DataTrackerMixin implements DataTrackerIntermediary {
     @Override
     public void toobee$setMobFlags(byte value) {
         @SuppressWarnings("unchecked")
-        final var entry = (DataTracker.Entry<Byte>) this.entries[PiglinCache.getMOB_FLAGS_ID()];
+        final var entry = (DataTracker.Entry<Byte>) this.entries[PiglinCache.MOB_FLAGS_ID];
         entry.set(value);
         entry.setDirty(true);
         this.dirty = true;
@@ -24,7 +24,7 @@ public abstract class DataTrackerMixin implements DataTrackerIntermediary {
     @Override
     public byte toobee$getMobFlags() {
         @SuppressWarnings("unchecked")
-        final var entry = (DataTracker.Entry<Byte>) this.entries[PiglinCache.getMOB_FLAGS_ID()];
+        final var entry = (DataTracker.Entry<Byte>) this.entries[PiglinCache.MOB_FLAGS_ID];
         return entry.get();
     }
 }

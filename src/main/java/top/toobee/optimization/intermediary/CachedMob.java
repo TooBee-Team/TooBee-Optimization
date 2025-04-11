@@ -1,24 +1,25 @@
 package top.toobee.optimization.intermediary;
 
 import net.minecraft.entity.mob.MobEntity;
+import top.toobee.optimization.cache.Caches;
 import top.toobee.optimization.cache.StackingMobCache;
 
 public interface CachedMob<T extends MobEntity, S extends StackingMobCache<T>> extends BeCached<S> {
-    StackingMobCache.Caches<T, S> toobee$getCacheManager();
+    Caches<T, S> toobee$getCacheManager();
 
     default void toobee$updateCache(final T entity) {
         final S newCache;
-        if (this.toobee$getCache() == null) {
-            newCache = this.toobee$getCacheManager().findCache(entity.getWorld(), entity.getBlockPos());
+        if (toobee$getCache() == null) {
+            newCache = toobee$getCacheManager().findCache(entity.getWorld(), entity.getBlockPos());
             if (newCache != null) {
                 newCache.getReferencedCounter().incrementAndGet();
-                this.toobee$setCache(newCache);
+                toobee$setCache(newCache);
             }
-        } else if (!this.toobee$getCache().checkCondition(entity)) {
-            newCache = this.toobee$getCacheManager().findCache(entity.getWorld(), entity.getBlockPos());
-            if (newCache != this.toobee$getCache()) {
-                this.toobee$getCache().getReferencedCounter().decrementAndGet();
-                this.toobee$setCache(newCache);
+        } else if (toobee$getCache().failCondition(entity)) {
+            newCache = toobee$getCacheManager().findCache(entity.getWorld(), entity.getBlockPos());
+            if (newCache != toobee$getCache()) {
+                toobee$getCache().getReferencedCounter().decrementAndGet();
+                toobee$setCache(newCache);
                 if (newCache != null)
                     newCache.getReferencedCounter().incrementAndGet();
             }

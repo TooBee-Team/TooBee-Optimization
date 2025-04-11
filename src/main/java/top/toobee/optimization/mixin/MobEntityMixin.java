@@ -20,8 +20,8 @@ public abstract class MobEntityMixin {
             final var c = p.toobee$getCache();
             if (c != null) {
                 if (!c.getHasUpdatedThisTick())
-                    c.setCanPickUpItems(instance.getNonSpectatingEntities(entityClass, box));
-                return c.getCanPickUpItems();
+                    c.canPickUpItems = instance.getNonSpectatingEntities(entityClass, box);
+                return c.canPickUpItems;
             }
         }
         return instance.getNonSpectatingEntities(entityClass, box);

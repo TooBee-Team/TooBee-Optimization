@@ -14,6 +14,6 @@ import java.util.function.BooleanSupplier;
 public abstract class MinecraftServerMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onStartTick(BooleanSupplier shouldKeepTicking, CallbackInfo info) {
-        Optimization.Companion.startServerTick();
+        Optimization.startServerTick();
     }
 }

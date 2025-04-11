@@ -19,9 +19,9 @@ public abstract class MoveToTargetTaskMixin {
     @Inject(method = "hasFinishedPath", cancellable = true, at = @At("HEAD"))
     public void hasFinishedPathHead(MobEntity entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof CachedMob<?,?> beCached) {
-            this.cache = beCached.toobee$getCache();
-            if (this.cache != null) {
-                final Boolean y = this.cache.getShouldRunMoveToTargetTask();
+            cache = beCached.toobee$getCache();
+            if (cache != null) {
+                final Boolean y = cache.shouldRunMoveToTargetTask;
                 if (y != null)
                     cir.setReturnValue(y);
             }
@@ -30,8 +30,8 @@ public abstract class MoveToTargetTaskMixin {
 
     @Inject(method = "hasFinishedPath", at = @At(value = "RETURN"))
     public void hasFinishedPathReturn(MobEntity entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
-        if (this.cache != null && this.cache.getShouldRunMoveToTargetTask() == null) {
-            this.cache.setShouldRunMoveToTargetTask(cir.getReturnValueZ());
+        if (cache != null && cache.shouldRunMoveToTargetTask == null) {
+            cache.shouldRunMoveToTargetTask = cir.getReturnValueZ();
         }
     }
 }

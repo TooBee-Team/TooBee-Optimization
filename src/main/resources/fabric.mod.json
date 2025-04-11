@@ -21,8 +21,7 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric-language-kotlin": ">=${kotlin_loader_version}",
     "minecraft": ">=${minecraft_version}",
-    "lithium": ">=0.14.7"
+    "lithium": ">=0.16.2"
   }
 }

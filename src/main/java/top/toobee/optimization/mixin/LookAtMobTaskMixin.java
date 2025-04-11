@@ -33,10 +33,10 @@ public abstract class LookAtMobTaskMixin {
         final Optional<LivingEntity> optional;
         if (entity instanceof CachedMob<?,?> && (cache = ((CachedMob<?,?>) entity).toobee$getCache()) != null) {
             if (cache.getHasUpdatedThisTick()) {
-                return cache.getLookAtMobTaskEntity();
+                return cache.lookAtMobTaskEntity;
             } else {
                 optional = instance.findFirst(predicate);
-                cache.setLookAtMobTaskEntity(optional);
+                cache.lookAtMobTaskEntity = optional;
             }
         } else {
             optional = instance.findFirst(predicate);

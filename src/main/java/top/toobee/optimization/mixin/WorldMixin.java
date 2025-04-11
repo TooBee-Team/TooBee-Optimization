@@ -20,13 +20,13 @@ public abstract class WorldMixin implements CollisionView {
         final Optional<BlockPos> p;
         if (entity instanceof CachedMob<?,?> c && (cache = c.toobee$getCache()) != null) {
             if (cache.getHasUpdatedThisTick()) {
-                p = cache.getSupportingBlockPos();
+                p = cache.supportingBlockPos;
                 if (toobee$check(p, box))
                     return p;
             } else {
                 p = CollisionView.super.findSupportingBlockPos(entity, box);
                 if (toobee$check(p, box))
-                    cache.setSupportingBlockPos(p);
+                    cache.supportingBlockPos = p;
                 return p;
             }
         }

@@ -34,6 +34,7 @@ TooBee Optimization are tested to be compatible with the following optimization 
 - [Carpet](https://github.com/gnembon/fabric-carpet)
 - [Chlorophyll](https://github.com/CyanidinMC/Chlorophyll)
 - [FerriteCore](https://github.com/malte0811/FerriteCore)
+- [Krypton](https://github.com/astei/krypton)
 - [Lithium](https://github.com/CaffeineMC/lithium) (Required)
 - [ModernFix](https://github.com/embeddedt/ModernFix)
 - [Moonrise](https://github.com/Tuinity/Moonrise)

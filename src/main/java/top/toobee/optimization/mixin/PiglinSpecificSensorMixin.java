@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.sensor.PiglinSpecificSensor;
 import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.server.world.ServerWorld;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,6 +15,7 @@ import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.intermediary.CachedMob;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
+@Debug(export = true)
 @Mixin(PiglinSpecificSensor.class)
 public abstract class PiglinSpecificSensorMixin {
     @Inject(method = "sense", at = @At("HEAD"), cancellable = true)

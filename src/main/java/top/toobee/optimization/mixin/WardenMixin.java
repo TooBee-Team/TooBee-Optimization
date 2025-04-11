@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.cache.StackingMobCache;
+import top.toobee.optimization.cache.Caches;
 import top.toobee.optimization.cache.WardenCache;
 import top.toobee.optimization.intermediary.CachedMob;
 
@@ -38,8 +38,8 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
     }
 
     @Override
-    public StackingMobCache.Caches<WardenEntity, WardenCache> toobee$getCacheManager() {
-        return WardenCache.Companion;
+    public Caches<WardenEntity, WardenCache> toobee$getCacheManager() {
+        return WardenCache.CACHES;
     }
 
     /**
@@ -49,27 +49,27 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
     @Overwrite
     private int getAngerAtTarget() {
         final int i;
-        if (this.cache != null) {
-            if (this.cache.getHasUpdatedThisTick()) {
-                return this.cache.getAngerAtTarget();
+        if (cache != null) {
+            if (cache.getHasUpdatedThisTick()) {
+                return cache.angerAtTarget;
             } else {
-                i = this.angerManager.getAngerFor(this.getTarget());
-                this.cache.setAngerAtTarget(i);
+                i = angerManager.getAngerFor(getTarget());
+                cache.angerAtTarget = i;
             }
         } else {
-            i = this.angerManager.getAngerFor(this.getTarget());
+            i = angerManager.getAngerFor(getTarget());
         }
         return i;
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickHead(CallbackInfo ci) {
-        this.toobee$updateCache((WardenEntity) (Object) this);
+        toobee$updateCache((WardenEntity) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void tickTail(CallbackInfo ci) {
-        if (this.cache != null)
-            this.cache.setHasUpdatedThisTick(true);
+        if (cache != null)
+            cache.setHasUpdatedThisTick(true);
     }
 }

@@ -33,8 +33,10 @@ public abstract class HostileMixin extends MobEntity {
             Items.GUNPOWDER,
             Items.POINTED_DRIPSTONE,
             Items.RED_MUSHROOM,
+            Items.POTATO,
             Items.ROTTEN_FLESH,
             Items.SPIDER_EYE,
+            Items.STONE,
             Items.STRING,
             Items.TORCH,
             Items.WHEAT_SEEDS
@@ -42,10 +44,10 @@ public abstract class HostileMixin extends MobEntity {
 
     @Override
     protected void equipLootStack(EquipmentSlot slot, ItemStack stack) {
-        this.equipStack(slot, stack);
-        this.updateDropChances(slot);
+        equipStack(slot, stack);
+        setDropGuaranteed(slot);
         final var item = stack.getItem();
-        if (!exceptions.contains(item) || !item.getComponents().isEmpty())
-            this.setPersistent();
+        if (!exceptions.contains(item))// || !item.getComponents().isEmpty())
+            setPersistent();
     }
 }

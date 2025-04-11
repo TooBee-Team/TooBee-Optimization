@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.sensor.NearestLivingEntitiesSensor;
 import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.server.world.ServerWorld;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,6 +16,7 @@ import top.toobee.optimization.intermediary.CachedPiglin;
 
 import java.util.List;
 
+@Debug(export = true)
 @Mixin(NearestLivingEntitiesSensor.class)
 public abstract class NearestLivingEntitiesSensorMixin<T extends LivingEntity> {
     // Some mods might inject at the head of this as well,

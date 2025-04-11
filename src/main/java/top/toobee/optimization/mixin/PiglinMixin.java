@@ -6,8 +6,8 @@ import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import top.toobee.optimization.cache.Caches;
 import top.toobee.optimization.cache.PiglinCache;
-import top.toobee.optimization.cache.StackingMobCache;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
 @Mixin(PiglinEntity.class)
@@ -21,15 +21,15 @@ public abstract class PiglinMixin extends MobEntity implements CachedPiglin {
 
     @Override
     public void tick() {
-        this.toobee$updateCache((PiglinEntity) (Object) this);
+        toobee$updateCache((PiglinEntity) (Object) this);
         super.tick();
-        if (this.cache != null)
-            this.cache.setHasUpdatedThisTick(true);
+        if (cache != null)
+            cache.setHasUpdatedThisTick(true);
     }
 
     @Override
     public PiglinCache toobee$getCache() {
-        return this.cache;
+        return cache;
     }
 
     @Override
@@ -38,13 +38,13 @@ public abstract class PiglinMixin extends MobEntity implements CachedPiglin {
     }
 
     @Override
-    public StackingMobCache.Caches<PiglinEntity, PiglinCache> toobee$getCacheManager() {
-        return PiglinCache.Companion;
+    public Caches<PiglinEntity, PiglinCache> toobee$getCacheManager() {
+        return PiglinCache.CACHES;
     }
 
     @Override
     public boolean toobee$hasNotBeenHitByPlayer() {
-        return this.hasNotBeenHitByPlayer;
+        return hasNotBeenHitByPlayer;
     }
 
     @Override

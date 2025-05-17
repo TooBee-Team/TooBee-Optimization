@@ -39,12 +39,12 @@ TooBee Optimization are tested to be compatible with the following optimization 
 - [Moonrise](https://github.com/Tuinity/Moonrise)
 - [Noisium](https://github.com/Steveplays28/noisium)
 - [ScalableLux](https://github.com/RelativityMC/ScalableLux)
-- [Sepals](https://github.com/cao-awa/Sepals) (Targeted compatibility measure has been made)
 - [ServerCore](https://github.com/Wesley1808/ServerCore)
 - [WorldThreader](https://github.com/2No2Name/worldthreader)
 - [VMP](https://github.com/RelativityMC/VMP-fabric)
 
-[Async](https://github.com/AxalotLDev/Async) is planned to be supported in the future. I have to ensure enough thread safety.
+Meanwhile, [Async](https://github.com/AxalotLDev/Async) is planned to be supported in the future. I have to ensure enough thread safety;
+[Sepals](https://github.com/cao-awa/Sepals) is not compatible, though I have tried best.
 
 ## What has been done
 
@@ -85,11 +85,13 @@ pointed dripstone, red mushroom, rotten flesh, spider eye, string, torch, wheat 
 
 ## Plan
 
-- [x] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
+- [ ] Compatibility with [Sepals](https://github.com/cao-awa/Sepals) Mod.
 - [ ] Compatibility with [Async](https://github.com/AxalotLDev/Async) Mod.
-- [ ] Make the enderman holding certain blocks despawn. *(It's a little bit different from other hostile mobs)*
+- [x] Make the enderman holding certain blocks despawn. *(It's a little bit different from other hostile mobs)*
+- [ ] Vast amount of boats optimization for monster farms.
 - [ ] Stacking shulkers optimization.
 - [ ] Stacking whithers optimization.
 - [ ] Reduce the calculation of spawning condition checking when pseudo-peace farm is running.
 - [ ] A high speed moving player loads fewer chunks, in oven shape more precisely.
 - [ ] (Quite hard) Optimize iron man farmer with more than six thousand villagers.
+- [ ] Downward compatibility (like 1.21)

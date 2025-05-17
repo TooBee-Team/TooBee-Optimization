@@ -51,7 +51,8 @@ public abstract class StackingMobCache<T extends MobEntity> implements AttachedC
         this.lastUpdateTick = l;
     }
 
-    @Override public final void setHasUpdatedThisTick(boolean b) {
+    @Override
+    public final void setHasUpdatedThisTick(boolean b) {
         if (b != hasUpdatedThisTick) {
             this.hasUpdatedThisTick = b;
             this.recheckUpdate = b;

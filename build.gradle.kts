@@ -46,13 +46,14 @@ tasks.processResources {
     inputs.property("loader_version", project.property("loader_version"))
     filteringCharset = "UTF-8"
 
+    val map = mapOf(
+        "id" to project.property("mod_id"),
+        "version" to project.version,
+        "minecraft_version" to project.property("minecraft_version"),
+        "loader_version" to project.property("loader_version"),
+    )
     filesMatching("fabric.mod.json") {
-        expand(
-            "id" to project.property("mod_id"),
-            "version" to project.version,
-            "minecraft_version" to project.property("minecraft_version"),
-            "loader_version" to project.property("loader_version"),
-        )
+        expand(map)
     }
 }
 

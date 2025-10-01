@@ -81,7 +81,7 @@ public abstract class StackingMobCache<T extends MobEntity> implements AttachedC
 
     @Override
     public boolean failCondition(T t) {
-        return !(t.getBlockPos().equals(pos) && t.getWorld() == world && t.isAlive());
+        return !(t.getBlockPos().equals(pos) && t.getEntityWorld() == world && t.isAlive());
     }
 
     @Override

@@ -34,7 +34,7 @@ public final class Caches<T extends MobEntity, S extends StackingMobCache<T>> {
             if (cls.isInstance(c)) {
                 @SuppressWarnings("unchecked")
                 final var t = (T) c;
-                if (t.getBlockPos().equals(pos) && t.getWorld() == world && ++i > 16) {
+                if (t.getBlockPos().equals(pos) && t.getEntityWorld() == world && ++i > 16) {
                     all.computeIfAbsent(Pair.of(world, pos), p -> create(p.getLeft(), p.getRight()));
                     return;
                 }

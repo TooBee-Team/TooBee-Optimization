@@ -98,7 +98,7 @@ public final class PiglinCache extends StackingMobCache<PiglinEntity> {
             this.nearestItems = null;
         else
             this.nearestItems = ListExt.prioritize(nearestItems,
-                    it -> it.getPos().isInRange(pos.toCenterPos(), 32.0),
+                    it -> it.getEntityPos().isInRange(pos.toCenterPos(), 32.0),
                     it -> it.getStack().isOf(PiglinBrain.BARTERING_ITEM) && it.getBlockPos().equals(pos));
     }
 

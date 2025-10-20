@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.Optimization;
+import top.toobee.optimization.Main;
 
 import java.util.function.BooleanSupplier;
 
@@ -14,6 +14,6 @@ import java.util.function.BooleanSupplier;
 public abstract class MinecraftServerMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onStartTick(BooleanSupplier shouldKeepTicking, CallbackInfo info) {
-        Optimization.startServerTick();
+        Main.startServerTick();
     }
 }

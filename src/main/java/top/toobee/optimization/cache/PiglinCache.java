@@ -24,55 +24,76 @@ import top.toobee.optimization.util.ListExt;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class PiglinCache extends StackingMobCache<PiglinEntity> {
     public static final Caches<PiglinEntity, PiglinCache> CACHES = new Caches<>(PiglinEntity.class, PiglinCache::new);
     public static final int MOB_FLAGS_ID = MobEntityAccessor.getMobFlags().id();
+
+    private record MemoryCache(
+            Optional<BlockPos> NEAREST_REPELLENT,
+            Optional<MobEntity> NEAREST_VISIBLE_NEMESIS,
+            Optional<HoglinEntity> NEAREST_VISIBLE_HUNTABLE_HOGLIN,
+            Optional<HoglinEntity> NEAREST_VISIBLE_BABY_HOGLIN,
+            Optional<LivingEntity> NEAREST_VISIBLE_ZOMBIFIED,
+            Optional<PlayerEntity> NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD,
+            Optional<PlayerEntity> NEAREST_PLAYER_HOLDING_WANTED_ITEM,
+            Optional<List<AbstractPiglinEntity>> NEARBY_ADULT_PIGLINS,
+            Optional<List<AbstractPiglinEntity>> NEAREST_VISIBLE_ADULT_PIGLINS,
+            Optional<Integer> VISIBLE_ADULT_PIGLIN_COUNT,
+            Optional<Integer> VISIBLE_ADULT_HOGLIN_COUNT
+    ) {
+        static final MemoryCache DEFAULT = new MemoryCache(
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()
+        );
+    }
+
+    private MemoryCache memoryCache = MemoryCache.DEFAULT;
 
     public PiglinCache(World world, BlockPos pos) {
         super(world, pos);
     }
 
-    private Optional<BlockPos> NEAREST_REPELLENT = Optional.empty();
-    private Optional<MobEntity> NEAREST_VISIBLE_NEMESIS = Optional.empty();
-    private Optional<HoglinEntity> NEAREST_VISIBLE_HUNTABLE_HOGLIN = Optional.empty();
-    private Optional<HoglinEntity> NEAREST_VISIBLE_BABY_HOGLIN = Optional.empty();
-    private Optional<LivingEntity> NEAREST_VISIBLE_ZOMBIFIED = Optional.empty();
-    private Optional<PlayerEntity> NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD = Optional.empty();
-    private Optional<PlayerEntity> NEAREST_PLAYER_HOLDING_WANTED_ITEM = Optional.empty();
-    private Optional<List<AbstractPiglinEntity>> NEARBY_ADULT_PIGLINS = Optional.empty();
-    private Optional<List<AbstractPiglinEntity>> NEAREST_VISIBLE_ADULT_PIGLINS = Optional.empty();
-    private Optional<Integer> VISIBLE_ADULT_PIGLIN_COUNT = Optional.empty();
-    private Optional<Integer> VISIBLE_ADULT_HOGLIN_COUNT = Optional.empty();
-
     @Override
     public void newSense(ServerWorld serverWorld, PiglinEntity entity) {
         final var brain = entity.getBrain();
-        brain.remember(MemoryModuleType.NEAREST_REPELLENT, this.NEAREST_REPELLENT);
-        brain.remember(MemoryModuleType.NEAREST_VISIBLE_NEMESIS, this.NEAREST_VISIBLE_NEMESIS);
-        brain.remember(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, this.NEAREST_VISIBLE_HUNTABLE_HOGLIN);
-        brain.remember(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, this.NEAREST_VISIBLE_BABY_HOGLIN);
-        brain.remember(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, this.NEAREST_VISIBLE_ZOMBIFIED);
-        brain.remember(MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, this.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD);
-        brain.remember(MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, this.NEAREST_PLAYER_HOLDING_WANTED_ITEM);
-        brain.remember(MemoryModuleType.NEARBY_ADULT_PIGLINS, this.NEARBY_ADULT_PIGLINS);
-        brain.remember(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, this.NEAREST_VISIBLE_ADULT_PIGLINS);
-        brain.remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, this.VISIBLE_ADULT_PIGLIN_COUNT);
-        brain.remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, this.VISIBLE_ADULT_HOGLIN_COUNT);
+        final var c = this.memoryCache;
+        brain.remember(MemoryModuleType.NEAREST_REPELLENT, c.NEAREST_REPELLENT);
+        brain.remember(MemoryModuleType.NEAREST_VISIBLE_NEMESIS, c.NEAREST_VISIBLE_NEMESIS);
+        brain.remember(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, c.NEAREST_VISIBLE_HUNTABLE_HOGLIN);
+        brain.remember(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, c.NEAREST_VISIBLE_BABY_HOGLIN);
+        brain.remember(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, c.NEAREST_VISIBLE_ZOMBIFIED);
+        brain.remember(MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, c.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD);
+        brain.remember(MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, c.NEAREST_PLAYER_HOLDING_WANTED_ITEM);
+        brain.remember(MemoryModuleType.NEARBY_ADULT_PIGLINS, c.NEARBY_ADULT_PIGLINS);
+        brain.remember(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, c.NEAREST_VISIBLE_ADULT_PIGLINS);
+        brain.remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, c.VISIBLE_ADULT_PIGLIN_COUNT);
+        brain.remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, c.VISIBLE_ADULT_HOGLIN_COUNT);
+
     }
 
     public void reset(Brain<PiglinEntity> brain) {
-        this.NEAREST_REPELLENT = brain.getOptionalMemory(MemoryModuleType.NEAREST_REPELLENT);
-        this.NEAREST_VISIBLE_NEMESIS = brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_NEMESIS);
-        this.NEAREST_VISIBLE_HUNTABLE_HOGLIN = brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN);
-        this.NEAREST_VISIBLE_BABY_HOGLIN = brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN);
-        this.NEAREST_VISIBLE_ZOMBIFIED = brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED);
-        this.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD = brain.getOptionalMemory(MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD);
-        this.NEAREST_PLAYER_HOLDING_WANTED_ITEM = brain.getOptionalMemory(MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM);
-        this.NEARBY_ADULT_PIGLINS = brain.getOptionalMemory(MemoryModuleType.NEARBY_ADULT_PIGLINS);
-        this.NEAREST_VISIBLE_ADULT_PIGLINS = brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS);
-        this.VISIBLE_ADULT_PIGLIN_COUNT = brain.getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
-        this.VISIBLE_ADULT_HOGLIN_COUNT = brain.getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
+        this.memoryCache = new MemoryCache(
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_REPELLENT),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_NEMESIS),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM),
+                brain.getOptionalMemory(MemoryModuleType.NEARBY_ADULT_PIGLINS),
+                brain.getOptionalMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS),
+                brain.getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT),
+                brain.getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT)
+        );
     }
 
     @Override

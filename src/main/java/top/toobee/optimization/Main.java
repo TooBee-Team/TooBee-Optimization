@@ -9,7 +9,7 @@ import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.cache.WardenCache;
 import top.toobee.optimization.accessor.EntityClassGroupAccessor;
 
-public final class Optimization implements DedicatedServerModInitializer {
+public final class Main implements DedicatedServerModInitializer {
     public static void startServerTick() {
         WardenCache.CACHES.tick();
         PiglinCache.CACHES.tick();

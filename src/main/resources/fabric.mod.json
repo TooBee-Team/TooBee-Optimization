@@ -12,7 +12,7 @@
   "environment": "server",
   "entrypoints": {
     "server": [
-      "top.toobee.optimization.Optimization"
+      "top.toobee.optimization.Main"
     ]
   },
   "mixins": [
@@ -22,6 +22,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}",
-    "lithium": ">=0.16.2"
+    "lithium": ">=0.20.0"
   }
 }

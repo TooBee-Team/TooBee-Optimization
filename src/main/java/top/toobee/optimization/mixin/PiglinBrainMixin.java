@@ -1,12 +1,12 @@
 package top.toobee.optimization.mixin;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.entity.mob.PiglinEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,43 +16,43 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
-@Mixin(PiglinBrain.class)
+@Mixin(PiglinAi.class)
 public abstract class PiglinBrainMixin {
     @Shadow
-    private static boolean doesNotHaveGoldInOffHand(PiglinEntity piglin) {
+    private static boolean isNotHoldingLovedItemInOffHand(Piglin piglin) {
         throw new AssertionError();
     }
 
-    @Redirect(method = "tickActivities", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/PiglinEntity;setAttacking(Z)V"))
-    private static void setAttacking(PiglinEntity instance, boolean b) {
+    @Redirect(method = "updateActivity", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;setAggressive(Z)V"))
+    private static void setAttacking(Piglin instance, boolean b) {
         final var c = ((CachedPiglin) instance).toobee$getCache();
         if (c != null)
             c.redirectAttacking(instance, b);
         else
-            instance.setAttacking(b);
+            instance.setAggressive(b);
     }
 
-    @Inject(method = "canGather", at = @At("HEAD"), cancellable = true)
-    private static void canGather(PiglinEntity piglin, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "wantsToPickup", at = @At("HEAD"), cancellable = true)
+    private static void canGather(Piglin piglin, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         final var p = (CachedPiglin) piglin;
         if (p.toobee$getCache() != null) {
-            if (p.toobee$hasNotBeenHitByPlayer() && stack.isOf(PiglinBrain.BARTERING_ITEM))
-                cir.setReturnValue(doesNotHaveGoldInOffHand(piglin));
+            if (p.toobee$hasNotBeenHitByPlayer() && stack.is(PiglinAi.BARTERING_ITEM))
+                cir.setReturnValue(isNotHoldingLovedItemInOffHand(piglin));
             else
-                p.toobee$setHasNotBeenHitByPlayer(!piglin.getBrain().hasMemoryModule(MemoryModuleType.ADMIRING_DISABLED));
+                p.toobee$setHasNotBeenHitByPlayer(!piglin.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_DISABLED));
         }
     }
 
-    @Redirect(method = "doesNotHaveGoldInOffHand", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/PiglinBrain;isGoldenItem(Lnet/minecraft/item/ItemStack;)Z"))
+    @Redirect(method = "isNotHoldingLovedItemInOffHand", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/monster/piglin/PiglinAi;isLovedItem(Lnet/minecraft/world/item/ItemStack;)Z"))
     private static boolean isGoldenItem(ItemStack stack) {
-        return stack.isOf(PiglinBrain.BARTERING_ITEM) || stack.isIn(ItemTags.PIGLIN_LOVED);
+        return stack.is(PiglinAi.BARTERING_ITEM) || stack.is(ItemTags.PIGLIN_LOVED);
     }
 
-    @Inject(method = "onAttacked", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/ai/brain/Brain;remember(Lnet/minecraft/entity/ai/brain/MemoryModuleType;Ljava/lang/Object;J)V"))
-    private static void hasNotBeenHitByPlayer(ServerWorld world, PiglinEntity piglin, LivingEntity attacker, CallbackInfo ci) {
+    @Inject(method = "wasHurtBy", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ai/Brain;setMemoryWithExpiry(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;Ljava/lang/Object;J)V"))
+    private static void hasNotBeenHitByPlayer(ServerLevel world, Piglin piglin, LivingEntity attacker, CallbackInfo ci) {
         ((CachedPiglin) piglin).toobee$setHasNotBeenHitByPlayer(false);
     }
 }

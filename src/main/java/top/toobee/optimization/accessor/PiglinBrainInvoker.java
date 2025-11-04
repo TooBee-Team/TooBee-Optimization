@@ -1,14 +1,14 @@
 package top.toobee.optimization.accessor;
 
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.entity.mob.PiglinEntity;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(PiglinBrain.class)
+@Mixin(PiglinAi.class)
 public interface PiglinBrainInvoker {
-    @Invoker("doesNotHaveGoldInOffHand")
-    static boolean doesNotHaveGoldInOffHand(PiglinEntity piglin) {
+    @Invoker("isNotHoldingLovedItemInOffHand")
+    static boolean doesNotHaveGoldInOffHand(Piglin piglin) {
         throw new AssertionError();
     }
 }

@@ -1,14 +1,14 @@
 package top.toobee.optimization.cache;
 
-import net.minecraft.world.World;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
+import net.minecraft.world.level.Level;
 
 public interface AttachedCache<T> {
     /**
      * For identification. Originally it is ServerWorld, but it's always inconvenient.
      */
-    World getWorld();
+    Level getWorld();
 
     /**
      * Used to check whether to drop this cache.
@@ -48,7 +48,7 @@ public interface AttachedCache<T> {
      * Run every end of tick to reset some variables.
      */
     default void tick() {
-        final var time = getWorld().getTime();
+        final var time = getWorld().getGameTime();
         if (getLastUpdateTick() != time) {
             if (getHasUpdatedThisTick()) {
                 setHasUpdatedThisTick(false);

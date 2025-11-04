@@ -1,22 +1,22 @@
 package top.toobee.optimization.mixin;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Set;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
-@Mixin(HostileEntity.class)
-public abstract class HostileMixin extends MobEntity {
-    protected HostileMixin(EntityType<? extends MobEntity> entityType, World world) {
+@Mixin(Monster.class)
+public abstract class HostileMixin extends Mob {
+    protected HostileMixin(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -43,11 +43,11 @@ public abstract class HostileMixin extends MobEntity {
     );
 
     @Override
-    protected void equipLootStack(EquipmentSlot slot, ItemStack stack) {
-        equipStack(slot, stack);
-        setDropGuaranteed(slot);
+    protected void setItemSlotAndDropWhenKilled(EquipmentSlot slot, ItemStack stack) {
+        setItemSlot(slot, stack);
+        setGuaranteedDrop(slot);
         final var item = stack.getItem();
         if (!exceptions.contains(item))// || !item.getComponents().isEmpty())
-            setPersistent();
+            setPersistenceRequired();
     }
 }

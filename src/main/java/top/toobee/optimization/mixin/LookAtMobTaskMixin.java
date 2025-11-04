@@ -1,11 +1,5 @@
 package top.toobee.optimization.mixin;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.LivingTargetCache;
-import net.minecraft.entity.ai.brain.MemoryQueryResult;
-import net.minecraft.entity.ai.brain.task.LookAtMobTask;
-import net.minecraft.entity.ai.brain.task.TaskTriggerer;
-import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -14,20 +8,26 @@ import top.toobee.optimization.intermediary.CachedMob;
 
 import java.util.Optional;
 import java.util.function.Predicate;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
+import net.minecraft.world.entity.ai.behavior.declarative.MemoryAccessor;
+import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 
-@Mixin(LookAtMobTask.class)
+@Mixin(SetEntityLookTarget.class)
 public abstract class LookAtMobTaskMixin {
     @Redirect(method = "method_47063", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/ai/brain/LivingTargetCache;findFirst(Ljava/util/function/Predicate;)Ljava/util/Optional;"))
+            target = "Lnet/minecraft/world/entity/ai/memory/NearestVisibleLivingEntities;findClosest(Ljava/util/function/Predicate;)Ljava/util/Optional;"))
     private static Optional<LivingEntity> redirect(
-            LivingTargetCache instance,
+            NearestVisibleLivingEntities instance,
             Predicate<LivingEntity> predicate,
-            TaskTriggerer.TaskContext<LivingEntity> context,
-            MemoryQueryResult<?,?> lookTarget,
+            BehaviorBuilder.Instance<LivingEntity> context,
+            MemoryAccessor<?,?> lookTarget,
             Predicate<LivingEntity> predicate2,
             float maxDistance,
-            MemoryQueryResult<?,?> visibleMobs,
-            ServerWorld world,
+            MemoryAccessor<?,?> visibleMobs,
+            ServerLevel world,
             LivingEntity entity) {
         final StackingMobCache<?> cache;
         final Optional<LivingEntity> optional;
@@ -35,11 +35,11 @@ public abstract class LookAtMobTaskMixin {
             if (cache.getHasUpdatedThisTick()) {
                 return cache.lookAtMobTaskEntity;
             } else {
-                optional = instance.findFirst(predicate);
+                optional = instance.findClosest(predicate);
                 cache.lookAtMobTaskEntity = optional;
             }
         } else {
-            optional = instance.findFirst(predicate);
+            optional = instance.findClosest(predicate);
         }
         return optional;
     }

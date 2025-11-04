@@ -1,8 +1,8 @@
 package top.toobee.optimization.mixin;
 
-import net.minecraft.entity.ai.brain.WalkTarget;
-import net.minecraft.entity.ai.brain.task.MoveToTargetTask;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.toobee.optimization.cache.StackingMobCache;
 import top.toobee.optimization.intermediary.CachedMob;
 
-@Mixin(MoveToTargetTask.class)
+@Mixin(MoveToTargetSink.class)
 public abstract class MoveToTargetTaskMixin {
     @Unique
     private StackingMobCache<?> cache = null;
 
-    @Inject(method = "hasFinishedPath", cancellable = true, at = @At("HEAD"))
-    public void hasFinishedPathHead(MobEntity entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "tryComputePath", cancellable = true, at = @At("HEAD"))
+    public void hasFinishedPathHead(Mob entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof CachedMob<?,?> beCached) {
             cache = beCached.toobee$getCache();
             if (cache != null) {
@@ -28,8 +28,8 @@ public abstract class MoveToTargetTaskMixin {
         }
     }
 
-    @Inject(method = "hasFinishedPath", at = @At(value = "RETURN"))
-    public void hasFinishedPathReturn(MobEntity entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "tryComputePath", at = @At(value = "RETURN"))
+    public void hasFinishedPathReturn(Mob entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
         if (cache != null && cache.shouldRunMoveToTargetTask == null) {
             cache.shouldRunMoveToTargetTask = cir.getReturnValueZ();
         }

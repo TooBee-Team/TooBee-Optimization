@@ -1,13 +1,5 @@
 package top.toobee.optimization.cache;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.LivingTargetCache;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -16,15 +8,22 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
+import net.minecraft.world.level.Level;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-public abstract class StackingMobCache<T extends MobEntity> implements AttachedCache<T> {
+public abstract class StackingMobCache<T extends Mob> implements AttachedCache<T> {
     private final ReentrantLock lock = new ReentrantLock();
     private final AtomicInteger referencedCounter = new AtomicInteger(0);
     private List<LivingEntity> trackers = Collections.emptyList();
     private @Nullable LivingEntity nearestTarget = null;
 
-    protected final World world;
+    protected final Level world;
     public final BlockPos pos;
     public @Nullable Boolean shouldRunMoveToTargetTask = null;
     public Optional<BlockPos> supportingBlockPos = Optional.empty();
@@ -34,12 +33,12 @@ public abstract class StackingMobCache<T extends MobEntity> implements AttachedC
     private volatile boolean recheckUpdate = false;
     private boolean hasUpdatedThisTick = false;
 
-    public StackingMobCache(World world, BlockPos pos) {
+    public StackingMobCache(Level world, BlockPos pos) {
         this.world = world;
         this.pos = pos;
     }
 
-    @Override public final World getWorld() { return world; }
+    @Override public final Level getWorld() { return world; }
     @Override public final Lock getLock() { return lock; }
     @Override public final AtomicInteger getReferencedCounter() { return referencedCounter; }
     @Override public final long getLastUpdateTick() { return lastUpdateTick; }
@@ -81,7 +80,7 @@ public abstract class StackingMobCache<T extends MobEntity> implements AttachedC
 
     @Override
     public boolean failCondition(T t) {
-        return !(t.getBlockPos().equals(pos) && t.getEntityWorld() == world && t.isAlive());
+        return !(t.blockPosition().equals(pos) && t.level() == world && t.isAlive());
     }
 
     @Override
@@ -94,11 +93,11 @@ public abstract class StackingMobCache<T extends MobEntity> implements AttachedC
         this.recheckUpdate = false;
     }
 
-    public final void senseNearestLivingEntities(ServerWorld serverWorld, T t) {
+    public final void senseNearestLivingEntities(ServerLevel serverWorld, T t) {
         final var brain = t.getBrain();
-        brain.remember(MemoryModuleType.MOBS, trackers);
-        brain.remember(MemoryModuleType.VISIBLE_MOBS, new LivingTargetCache(serverWorld, t, trackers));
+        brain.setMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES, trackers);
+        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(serverWorld, t, trackers));
     }
 
-    public abstract void newSense(ServerWorld serverWorld, T entity);
+    public abstract void newSense(ServerLevel serverWorld, T entity);
 }

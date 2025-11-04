@@ -1,18 +1,18 @@
 package top.toobee.optimization.mixin;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PiglinEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import top.toobee.optimization.cache.Caches;
 import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
-@Mixin(PiglinEntity.class)
-public abstract class PiglinMixin extends MobEntity implements CachedPiglin {
-    protected PiglinMixin(EntityType<? extends MobEntity> entityType, World world) {
+@Mixin(Piglin.class)
+public abstract class PiglinMixin extends Mob implements CachedPiglin {
+    protected PiglinMixin(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -21,7 +21,7 @@ public abstract class PiglinMixin extends MobEntity implements CachedPiglin {
 
     @Override
     public void tick() {
-        toobee$updateCache((PiglinEntity) (Object) this);
+        toobee$updateCache((Piglin) (Object) this);
         super.tick();
         if (cache != null)
             cache.setHasUpdatedThisTick(true);
@@ -38,7 +38,7 @@ public abstract class PiglinMixin extends MobEntity implements CachedPiglin {
     }
 
     @Override
-    public Caches<PiglinEntity, PiglinCache> toobee$getCacheManager() {
+    public Caches<Piglin, PiglinCache> toobee$getCacheManager() {
         return PiglinCache.CACHES;
     }
 

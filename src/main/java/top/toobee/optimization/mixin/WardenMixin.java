@@ -1,8 +1,8 @@
 package top.toobee.optimization.mixin;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.WardenAngerManager;
-import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.warden.AngerManagement;
+import net.minecraft.world.entity.monster.warden.Warden;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -15,13 +15,13 @@ import top.toobee.optimization.cache.Caches;
 import top.toobee.optimization.cache.WardenCache;
 import top.toobee.optimization.intermediary.CachedMob;
 
-@Mixin(WardenEntity.class)
-public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache> {
+@Mixin(Warden.class)
+public abstract class WardenMixin implements CachedMob<Warden, WardenCache> {
     @Unique
     private WardenCache cache = null;
 
     @Shadow
-    WardenAngerManager angerManager;
+    AngerManagement angerManagement;
 
     @Shadow
     @Nullable
@@ -38,7 +38,7 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
     }
 
     @Override
-    public Caches<WardenEntity, WardenCache> toobee$getCacheManager() {
+    public Caches<Warden, WardenCache> toobee$getCacheManager() {
         return WardenCache.CACHES;
     }
 
@@ -47,24 +47,24 @@ public abstract class WardenMixin implements CachedMob<WardenEntity, WardenCache
      * @reason Use the cache value of anger
      */
     @Overwrite
-    private int getAngerAtTarget() {
+    private int getActiveAnger() {
         final int i;
         if (cache != null) {
             if (cache.getHasUpdatedThisTick()) {
                 return cache.angerAtTarget;
             } else {
-                i = angerManager.getAngerFor(getTarget());
+                i = angerManagement.getActiveAnger(getTarget());
                 cache.angerAtTarget = i;
             }
         } else {
-            i = angerManager.getAngerFor(getTarget());
+            i = angerManagement.getActiveAnger(getTarget());
         }
         return i;
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickHead(CallbackInfo ci) {
-        toobee$updateCache((WardenEntity) (Object) this);
+        toobee$updateCache((Warden) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

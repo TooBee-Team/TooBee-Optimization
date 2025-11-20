@@ -15,9 +15,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 @Mixin(Monster.class)
-public abstract class HostileMixin extends Mob {
-    protected HostileMixin(EntityType<? extends Mob> entityType, Level world) {
-        super(entityType, world);
+public abstract class MonsterMixin extends Mob {
+    protected MonsterMixin(EntityType<? extends Mob> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Unique private static final Set<Item> exceptions = ReferenceOpenHashSet.of(

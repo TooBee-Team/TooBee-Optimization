@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 @Mixin(Mob.class)
-public abstract class MobEntityMixin {
+public abstract class MobMixin {
     @Redirect(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;getEntitiesOfClass(Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;"))
     public List<ItemEntity> getStackingEntities(Level instance, Class<ItemEntity> entityClass, AABB box) {

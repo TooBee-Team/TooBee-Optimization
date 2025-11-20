@@ -4,22 +4,22 @@
   "package": "top.toobee.optimization.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "DataTrackerMixin",
-    "EndermanMixin",
+    "SynchedEntityDataMixin",
+    "EnderManMixin",
     "EntityMixin",
-    "HostileMixin",
+    "MonsterMixin",
     "LookAtMobTaskMixin",
     "MinecraftServerMixin",
-    "MobEntityMixin",
-    "MoveToTargetTaskMixin",
-    "NearestItemsSensorMixin",
-    "NearestLivingEntitiesSensorMixin",
-    "PiglinBrainMixin",
+    "MobMixin",
+    "MoveToTargetSinkMixin",
+    "NearestItemSensorMixin",
+    "NearestLivingEntitySensorMixin",
+    "PiglinAiMixin",
     "PiglinMixin",
     "PiglinSpecificSensorMixin",
-    "WardenAttackablesSensorMixin",
+    "WardenEntitySensorMixin",
     "WardenMixin",
-    "WorldMixin"
+    "LevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -20,28 +20,28 @@ public final class Caches<T extends Mob, S extends StackingMobCache<T>> {
         this.factory = factory;
     }
 
-    public S findCache(@Nullable Level world, @Nullable BlockPos pos) {
-        return all.get(Pair.of(world, pos));
+    public S findCache(@Nullable Level level, @Nullable BlockPos pos) {
+        return all.get(Pair.of(level, pos));
     }
 
     public void tick() {
         all.values().forEach(StackingMobCache::tick);
     }
 
-    public void checkToCreate(Level world, BlockPos pos, Iterable<?> list) {
+    public void checkToCreate(Level level, BlockPos pos, Iterable<?> list) {
         int i = 0;
         for (var c : list)
             if (cls.isInstance(c)) {
                 @SuppressWarnings("unchecked")
                 final var t = (T) c;
-                if (t.blockPosition().equals(pos) && t.level() == world && ++i > 16) {
-                    all.computeIfAbsent(Pair.of(world, pos), p -> create(p.getLeft(), p.getRight()));
+                if (t.blockPosition().equals(pos) && level.equals(t.level()) && ++i > 16) {
+                    all.computeIfAbsent(Pair.of(level, pos), p -> create(p.getLeft(), p.getRight()));
                     return;
                 }
             }
     }
 
-    public S create(Level world, BlockPos pos) {
-        return factory.apply(world, pos);
+    public S create(Level level, BlockPos pos) {
+        return factory.apply(level, pos);
     }
 }

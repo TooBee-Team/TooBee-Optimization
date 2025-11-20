@@ -27,7 +27,7 @@ public abstract class LookAtMobTaskMixin {
             Predicate<LivingEntity> predicate2,
             float maxDistance,
             MemoryAccessor<?,?> visibleMobs,
-            ServerLevel world,
+            ServerLevel level,
             LivingEntity entity) {
         final StackingMobCache<?> cache;
         final Optional<LivingEntity> optional;

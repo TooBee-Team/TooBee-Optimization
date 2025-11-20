@@ -1,6 +1,5 @@
 plugins {
     id("fabric-loom") version "1.13-SNAPSHOT"
-    id("maven-publish")
 }
 
 version = project.property("mod_version") as String
@@ -10,9 +9,8 @@ base {
     archivesName.set(project.property("archives_base_name") as String)
 }
 
-val targetJavaVersion = 21
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
 }
 
@@ -31,13 +29,12 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    //mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}:v2")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
     modImplementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
 
-    annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.property("mixin_squared_version")}")
-        ?.let { implementation(it) }?.let { include(it) }
+    // annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.property("mixin_squared_version")}")
+    //    ?.let { implementation(it) }?.let { include(it) }
     //modImplementation(fabricApi.module("fabric-lifecycle-events-v1", project.property("fabric_version") as String))
 }
 

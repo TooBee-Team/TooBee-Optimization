@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(EnderMan.class)
-public abstract class EndermanMixin {
+public abstract class EnderManMixin {
     @Unique
     @SuppressWarnings("deprecation")
     private static final HolderSet<Block> EXCEPTIONS = HolderSet.direct(Stream.of(

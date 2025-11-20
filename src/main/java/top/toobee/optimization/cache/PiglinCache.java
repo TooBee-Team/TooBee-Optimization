@@ -3,8 +3,8 @@ package top.toobee.optimization.cache;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import top.toobee.optimization.accessor.MobEntityAccessor;
-import top.toobee.optimization.intermediary.DataTrackerIntermediary;
+import top.toobee.optimization.accessor.MobAccessor;
+import top.toobee.optimization.intermediary.MobFlagsTouch;
 import top.toobee.optimization.util.ListExt;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 
 public final class PiglinCache extends StackingMobCache<Piglin> {
     public static final Caches<Piglin, PiglinCache> CACHES = new Caches<>(Piglin.class, PiglinCache::new);
-    public static final int MOB_FLAGS_ID = MobEntityAccessor.getMobFlags().id();
+    public static final int MOB_FLAGS_ID = MobAccessor.getMobFlags().id();
 
     private record MemoryCache(
             Optional<BlockPos> NEAREST_REPELLENT,
@@ -57,12 +57,12 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
 
     private MemoryCache memoryCache = MemoryCache.DEFAULT;
 
-    public PiglinCache(Level world, BlockPos pos) {
-        super(world, pos);
+    public PiglinCache(Level level, BlockPos pos) {
+        super(level, pos);
     }
 
     @Override
-    public void newSense(ServerLevel serverWorld, Piglin entity) {
+    public void newSense(ServerLevel serverLevel, Piglin entity) {
         final var brain = entity.getBrain();
         final var c = this.memoryCache;
         brain.setMemory(MemoryModuleType.NEAREST_REPELLENT, c.NEAREST_REPELLENT);
@@ -97,7 +97,7 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
 
     @Override
     public void truncate() {
-        CACHES.all.remove(Pair.of(world, pos));
+        CACHES.all.remove(Pair.of(level, pos));
     }
 
     @Override
@@ -126,7 +126,7 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
         if (getHasUpdatedThisTick()) {
             // Accelerate setAttacking by implement specially
             if (changeAttacking) {
-                final var t = (DataTrackerIntermediary) instance.getEntityData();
+                final var t = (MobFlagsTouch) instance.getEntityData();
                 final var b = t.toobee$getMobFlags();
                 t.toobee$setMobFlags((byte) (attacking ? b | 4 : b & -5));
             }
@@ -136,12 +136,12 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
         }
     }
 
-    public Optional<ItemEntity> getNearestItem(ServerLevel serverWorld, Piglin piglin) {
+    public Optional<ItemEntity> getNearestItem(ServerLevel serverLevel, Piglin piglin) {
         final var items = this.nearestItems;
         if (items == null)
             return Optional.empty();
         for (var item : items)
-            if (piglin.wantsToPickUp(serverWorld, item.getItem()) && piglin.hasLineOfSight(item))
+            if (piglin.wantsToPickUp(serverLevel, item.getItem()) && piglin.hasLineOfSight(item))
                 return Optional.of(item);
         return Optional.empty();
     }

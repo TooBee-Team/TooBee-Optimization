@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.toobee.optimization.accessor.PiglinBrainInvoker;
+import top.toobee.optimization.accessor.PiglinAiInvoker;
 import top.toobee.optimization.cache.PiglinCache;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
@@ -23,14 +23,14 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import static net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM;
 
 @Mixin(NearestItemSensor.class)
-public abstract class NearestItemsSensorMixin {
+public abstract class NearestItemSensorMixin {
     @Unique private static final String SENSE
             = "doTick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;)V";
 
     @Inject(method = SENSE, cancellable = true, at = @At("HEAD"))
     protected void head(ServerLevel world, Mob entity, CallbackInfo ci, @Share("cache") LocalRef<PiglinCache> c) {
         if (entity instanceof Piglin piglin) {
-            if (PiglinBrainInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()) {
+            if (PiglinAiInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()) {
                 final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
                 if (cache != null) {
                     c.set(cache);
@@ -53,7 +53,7 @@ public abstract class NearestItemsSensorMixin {
                         @Share("cache") LocalRef<PiglinCache> c, @Local List<ItemEntity> list) {
         if (entity instanceof Piglin piglin) {
             final PiglinCache cache = c.get();
-            if (cache != null && PiglinBrainInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()
+            if (cache != null && PiglinAiInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()
                     && ((CachedPiglin) piglin).toobee$hasNotBeenHitByPlayer()) {
                 cache.setNearestItems(list);
                 piglin.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));

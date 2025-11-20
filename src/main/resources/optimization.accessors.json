@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "EntityClassGroupAccessor",
-    "MobEntityAccessor",
-    "PiglinBrainInvoker"
+    "MobAccessor",
+    "PiglinAiInvoker"
   ]
 }

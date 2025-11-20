@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(PiglinAi.class)
-public interface PiglinBrainInvoker {
+public interface PiglinAiInvoker {
     @Invoker("isNotHoldingLovedItemInOffHand")
     static boolean doesNotHaveGoldInOffHand(Piglin piglin) {
         throw new AssertionError();

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.toobee.optimization.intermediary.CachedPiglin;
 
 @Mixin(PiglinAi.class)
-public abstract class PiglinBrainMixin {
+public abstract class PiglinAiMixin {
     @Shadow
     private static boolean isNotHoldingLovedItemInOffHand(Piglin piglin) {
         throw new AssertionError();
@@ -52,7 +52,7 @@ public abstract class PiglinBrainMixin {
 
     @Inject(method = "wasHurtBy", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/Brain;setMemoryWithExpiry(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;Ljava/lang/Object;J)V"))
-    private static void hasNotBeenHitByPlayer(ServerLevel world, Piglin piglin, LivingEntity attacker, CallbackInfo ci) {
+    private static void hasNotBeenHitByPlayer(ServerLevel level, Piglin piglin, LivingEntity attacker, CallbackInfo ci) {
         ((CachedPiglin) piglin).toobee$setHasNotBeenHitByPlayer(false);
     }
 }

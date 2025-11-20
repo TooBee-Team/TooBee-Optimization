@@ -12,8 +12,8 @@ import top.toobee.optimization.intermediary.CachedPiglin;
 
 @Mixin(Piglin.class)
 public abstract class PiglinMixin extends Mob implements CachedPiglin {
-    protected PiglinMixin(EntityType<? extends Mob> entityType, Level world) {
-        super(entityType, world);
+    protected PiglinMixin(EntityType<? extends Mob> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Unique private PiglinCache cache = null;

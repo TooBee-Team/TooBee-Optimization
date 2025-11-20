@@ -12,18 +12,18 @@ public final class WardenCache extends StackingMobCache<Warden> {
 
     public int angerAtTarget = 0;
 
-    private WardenCache(Level world, BlockPos pos) {
-        super(world, pos);
+    private WardenCache(Level level, BlockPos pos) {
+        super(level, pos);
     }
 
     @Override
     public void truncate() {
-        CACHES.all.remove(Pair.of(world, pos));
+        CACHES.all.remove(Pair.of(level, pos));
     }
 
     @Override
-    public void newSense(ServerLevel serverWorld, Warden entity) {
-        senseNearestLivingEntities(serverWorld, entity);
+    public void newSense(ServerLevel serverLevel, Warden entity) {
+        senseNearestLivingEntities(serverLevel, entity);
         final var it = getNearestTarget();
         if (it == null)
             entity.getBrain().eraseMemory(MemoryModuleType.NEAREST_ATTACKABLE);

@@ -12,13 +12,13 @@ import top.toobee.optimization.cache.StackingMobCache;
 import top.toobee.optimization.intermediary.CachedMob;
 
 @Mixin(MoveToTargetSink.class)
-public abstract class MoveToTargetTaskMixin {
+public abstract class MoveToTargetSinkMixin {
     @Unique
     private StackingMobCache<?> cache = null;
 
     @Inject(method = "tryComputePath", cancellable = true, at = @At("HEAD"))
-    public void hasFinishedPathHead(Mob entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof CachedMob<?,?> beCached) {
+    public void hasFinishedPathHead(Mob mob, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
+        if (mob instanceof CachedMob<?,?> beCached) {
             cache = beCached.toobee$getCache();
             if (cache != null) {
                 final Boolean y = cache.shouldRunMoveToTargetTask;
@@ -29,7 +29,7 @@ public abstract class MoveToTargetTaskMixin {
     }
 
     @Inject(method = "tryComputePath", at = @At(value = "RETURN"))
-    public void hasFinishedPathReturn(Mob entity, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
+    public void hasFinishedPathReturn(Mob mob, WalkTarget walkTarget, long time, CallbackInfoReturnable<Boolean> cir) {
         if (cache != null && cache.shouldRunMoveToTargetTask == null) {
             cache.shouldRunMoveToTargetTask = cir.getReturnValueZ();
         }

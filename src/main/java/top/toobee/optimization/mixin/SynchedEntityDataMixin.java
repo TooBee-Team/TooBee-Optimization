@@ -5,10 +5,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import top.toobee.optimization.cache.PiglinCache;
-import top.toobee.optimization.intermediary.DataTrackerIntermediary;
+import top.toobee.optimization.intermediary.MobFlagsTouch;
 
 @Mixin(SynchedEntityData.class)
-public abstract class DataTrackerMixin implements DataTrackerIntermediary {
+public abstract class SynchedEntityDataMixin implements MobFlagsTouch {
     @Shadow private boolean isDirty;
     @Shadow @Final private SynchedEntityData.DataItem<?>[] itemsById;
 

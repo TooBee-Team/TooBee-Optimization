@@ -23,7 +23,7 @@ public abstract class StackingMobCache<T extends Mob> implements AttachedCache<T
     private List<LivingEntity> trackers = Collections.emptyList();
     private @Nullable LivingEntity nearestTarget = null;
 
-    protected final Level world;
+    protected final Level level;
     public final BlockPos pos;
     public @Nullable Boolean shouldRunMoveToTargetTask = null;
     public Optional<BlockPos> supportingBlockPos = Optional.empty();
@@ -33,12 +33,12 @@ public abstract class StackingMobCache<T extends Mob> implements AttachedCache<T
     private volatile boolean recheckUpdate = false;
     private boolean hasUpdatedThisTick = false;
 
-    public StackingMobCache(Level world, BlockPos pos) {
-        this.world = world;
+    public StackingMobCache(Level level, BlockPos pos) {
+        this.level = level;
         this.pos = pos;
     }
 
-    @Override public final Level getWorld() { return world; }
+    @Override public final Level getLevel() { return level; }
     @Override public final Lock getLock() { return lock; }
     @Override public final AtomicInteger getReferencedCounter() { return referencedCounter; }
     @Override public final long getLastUpdateTick() { return lastUpdateTick; }
@@ -80,7 +80,7 @@ public abstract class StackingMobCache<T extends Mob> implements AttachedCache<T
 
     @Override
     public boolean failCondition(T t) {
-        return !(t.blockPosition().equals(pos) && t.level() == world && t.isAlive());
+        return !(t.blockPosition().equals(pos) && level.equals(t.level()) && t.isAlive());
     }
 
     @Override
@@ -93,11 +93,11 @@ public abstract class StackingMobCache<T extends Mob> implements AttachedCache<T
         this.recheckUpdate = false;
     }
 
-    public final void senseNearestLivingEntities(ServerLevel serverWorld, T t) {
+    public final void senseNearestLivingEntities(ServerLevel serverLevel, T t) {
         final var brain = t.getBrain();
         brain.setMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES, trackers);
-        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(serverWorld, t, trackers));
+        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(serverLevel, t, trackers));
     }
 
-    public abstract void newSense(ServerLevel serverWorld, T entity);
+    public abstract void newSense(ServerLevel serverLevel, T entity);
 }

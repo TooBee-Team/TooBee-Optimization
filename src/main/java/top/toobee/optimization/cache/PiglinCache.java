@@ -1,6 +1,7 @@
 package top.toobee.optimization.cache;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import top.toobee.optimization.accessor.MobAccessor;
@@ -79,7 +80,7 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
 
     }
 
-    public void reset(Brain<Piglin> brain) {
+    public void reset(Brain<@NotNull Piglin> brain) {
         this.memoryCache = new MemoryCache(
                 brain.getMemoryInternal(MemoryModuleType.NEAREST_REPELLENT),
                 brain.getMemoryInternal(MemoryModuleType.NEAREST_VISIBLE_NEMESIS),

@@ -1,5 +1,6 @@
 package top.toobee.optimization.mixin;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -22,7 +23,7 @@ public abstract class LookAtMobTaskMixin {
     private static Optional<LivingEntity> redirect(
             NearestVisibleLivingEntities instance,
             Predicate<LivingEntity> predicate,
-            BehaviorBuilder.Instance<LivingEntity> context,
+            BehaviorBuilder.Instance<@NotNull LivingEntity> context,
             MemoryAccessor<?,?> lookTarget,
             Predicate<LivingEntity> predicate2,
             float maxDistance,

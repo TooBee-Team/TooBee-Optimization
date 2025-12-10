@@ -1,6 +1,7 @@
 package top.toobee.optimization.mixin;
 
 import net.minecraft.network.syncher.SynchedEntityData;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +16,7 @@ public abstract class SynchedEntityDataMixin implements MobFlagsTouch {
     @Override
     public void toobee$setMobFlags(byte value) {
         @SuppressWarnings("unchecked")
-        final var entry = (SynchedEntityData.DataItem<Byte>) this.itemsById[PiglinCache.MOB_FLAGS_ID];
+        final var entry = (SynchedEntityData.DataItem<@NotNull Byte>) this.itemsById[PiglinCache.MOB_FLAGS_ID];
         entry.setValue(value);
         entry.setDirty(true);
         this.isDirty = true;
@@ -24,7 +25,7 @@ public abstract class SynchedEntityDataMixin implements MobFlagsTouch {
     @Override
     public byte toobee$getMobFlags() {
         @SuppressWarnings("unchecked")
-        final var entry = (SynchedEntityData.DataItem<Byte>) this.itemsById[PiglinCache.MOB_FLAGS_ID];
+        final var entry = (SynchedEntityData.DataItem<@NotNull Byte>) this.itemsById[PiglinCache.MOB_FLAGS_ID];
         return entry.getValue();
     }
 }

@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 @Mixin(Level.class)
 public abstract class LevelMixin implements CollisionGetter {
     @Override
-    public @NotNull Optional<BlockPos> findSupportingBlock(final Entity entity, final AABB aabb) {
+    public @NotNull Optional<BlockPos> findSupportingBlock(final @NotNull Entity entity, final @NotNull AABB aabb) {
         final StackingMobCache<?> cache;
         final Optional<BlockPos> p;
         if (entity instanceof CachedMob<?,?> c && (cache = c.toobee$getCache()) != null) {

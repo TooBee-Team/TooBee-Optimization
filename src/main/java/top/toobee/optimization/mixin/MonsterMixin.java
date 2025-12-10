@@ -1,6 +1,7 @@
 package top.toobee.optimization.mixin;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -16,7 +17,7 @@ import net.minecraft.world.level.Level;
 
 @Mixin(Monster.class)
 public abstract class MonsterMixin extends Mob {
-    protected MonsterMixin(EntityType<? extends Mob> entityType, Level level) {
+    protected MonsterMixin(EntityType<? extends @NotNull Mob> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -43,7 +44,7 @@ public abstract class MonsterMixin extends Mob {
     );
 
     @Override
-    protected void setItemSlotAndDropWhenKilled(EquipmentSlot slot, ItemStack stack) {
+    protected void setItemSlotAndDropWhenKilled(@NotNull EquipmentSlot slot, @NotNull ItemStack stack) {
         setItemSlot(slot, stack);
         setGuaranteedDrop(slot);
         final var item = stack.getItem();

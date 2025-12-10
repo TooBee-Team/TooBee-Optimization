@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.sensing.PiglinSpecificSensor;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,7 +30,7 @@ public abstract class PiglinSpecificSensorMixin {
     }
 
     @Inject(method = "doTick", at = @At("TAIL"))
-    public void tail(final ServerLevel level, final LivingEntity entity, final CallbackInfo ci, @Local final Brain<Piglin> brain) {
+    public void tail(final ServerLevel level, final LivingEntity entity, final CallbackInfo ci, @Local final Brain<@NotNull Piglin> brain) {
         if (entity instanceof Piglin piglin) {
             final var b = (CachedMob<?,?>) piglin;
             if (b.toobee$getCache() instanceof PiglinCache cache)

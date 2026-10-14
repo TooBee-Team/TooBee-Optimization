@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(PiglinAi.class)
 public interface PiglinAiInvoker {
     @Invoker("isNotHoldingLovedItemInOffHand")
-    static boolean doesNotHaveGoldInOffHand(Piglin piglin) {
+    static boolean isNotHoldingLovedItemInOffHand(Piglin piglin) {
         throw new AssertionError();
     }
 }

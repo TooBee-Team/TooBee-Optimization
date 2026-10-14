@@ -1,8 +1,7 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "top.toobee.optimization.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "SynchedEntityDataMixin",
     "EnderManMixin",
@@ -18,10 +17,12 @@
     "PiglinMixin",
     "PiglinSpecificSensorMixin",
     "WardenEntitySensorMixin",
-    "WardenMixin",
-    "LevelMixin"
+    "WardenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

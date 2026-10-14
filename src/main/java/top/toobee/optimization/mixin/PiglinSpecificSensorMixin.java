@@ -19,8 +19,8 @@ import top.toobee.optimization.intermediary.CachedPiglin;
 @Mixin(PiglinSpecificSensor.class)
 public abstract class PiglinSpecificSensorMixin {
     @Inject(method = "doTick", at = @At("HEAD"), cancellable = true)
-    public void head(final ServerLevel level, final LivingEntity entity, final CallbackInfo ci) {
-        if (entity instanceof Piglin piglin) {
+    public void head(final ServerLevel level, final LivingEntity body, final CallbackInfo ci) {
+        if (body instanceof Piglin piglin) {
             final var cache = ((CachedPiglin) piglin).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
                 cache.newSense(level, piglin);
@@ -30,8 +30,9 @@ public abstract class PiglinSpecificSensorMixin {
     }
 
     @Inject(method = "doTick", at = @At("TAIL"))
-    public void tail(final ServerLevel level, final LivingEntity entity, final CallbackInfo ci, @Local final Brain<@NotNull Piglin> brain) {
-        if (entity instanceof Piglin piglin) {
+    public void tail(final ServerLevel level, final LivingEntity body, final CallbackInfo ci,
+                     @Local(name = "brain") final Brain<@NotNull Piglin> brain) {
+        if (body instanceof Piglin piglin) {
             final var b = (CachedMob<?,?>) piglin;
             if (b.toobee$getCache() instanceof PiglinCache cache)
                 cache.reset(brain);

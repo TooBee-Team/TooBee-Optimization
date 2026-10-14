@@ -22,6 +22,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}",
-    "lithium": ">=0.20.0"
+    "lithium": ">=0.22.0"
   }
 }

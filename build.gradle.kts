@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.14-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.18-SNAPSHOT"
 }
 
 version = project.property("mod_version") as String
@@ -10,7 +10,7 @@ base {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
 }
 
@@ -29,9 +29,8 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    modImplementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
+    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    implementation("maven.modrinth:lithium:mc${project.property("lithium_version")}-fabric")
 
     // annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.property("mixin_squared_version")}")
     //    ?.let { implementation(it) }?.let { include(it) }

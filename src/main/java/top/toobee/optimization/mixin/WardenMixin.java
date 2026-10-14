@@ -21,7 +21,7 @@ public abstract class WardenMixin implements CachedMob<Warden, WardenCache> {
     private WardenCache cache = null;
 
     @Shadow
-    AngerManagement angerManagement;
+    private AngerManagement angerManagement;
 
     @Shadow
     @Nullable

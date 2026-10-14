@@ -22,20 +22,20 @@ public interface AttachedCache<T> {
     Lock getLock();
 
     /**
-     * It always not used directly by external class, just for a compulsive requirement to implement.
+     * It is always not used directly by external class, just for a compulsive requirement to implement.
      * @see #getLastUpdateTick()
      */
     long getLastUpdateTick();
     void setLastUpdateTick(long l);
 
     /**
-     * Target judges whether using or updating cache depending on this
+     * Target judges whether to use or update cache depending on this
      */
     boolean getHasUpdatedThisTick();
     void setHasUpdatedThisTick(boolean b);
 
     /**
-     * Check whether the target satisfy certain condition.
+     * Check whether the target satisfies certain condition.
      */
     boolean failCondition(T t);
 

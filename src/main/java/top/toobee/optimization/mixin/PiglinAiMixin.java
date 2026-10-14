@@ -19,7 +19,7 @@ import top.toobee.optimization.intermediary.CachedPiglin;
 @Mixin(PiglinAi.class)
 public abstract class PiglinAiMixin {
     @Shadow
-    private static boolean isNotHoldingLovedItemInOffHand(Piglin piglin) {
+    private static boolean isNotHoldingLovedItemInOffHand(Piglin body) {
         throw new AssertionError();
     }
 
@@ -34,25 +34,25 @@ public abstract class PiglinAiMixin {
     }
 
     @Inject(method = "wantsToPickup", at = @At("HEAD"), cancellable = true)
-    private static void canGather(Piglin piglin, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        final var p = (CachedPiglin) piglin;
+    private static void canGather(Piglin body, ItemStack itemStack, CallbackInfoReturnable<Boolean> cir) {
+        final var p = (CachedPiglin) body;
         if (p.toobee$getCache() != null) {
-            if (p.toobee$hasNotBeenHitByPlayer() && stack.is(PiglinAi.BARTERING_ITEM))
-                cir.setReturnValue(isNotHoldingLovedItemInOffHand(piglin));
+            if (p.toobee$hasNotBeenHitByPlayer() && itemStack.is(PiglinAi.BARTERING_ITEM))
+                cir.setReturnValue(isNotHoldingLovedItemInOffHand(body));
             else
-                p.toobee$setHasNotBeenHitByPlayer(!piglin.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_DISABLED));
+                p.toobee$setHasNotBeenHitByPlayer(!body.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_DISABLED));
         }
     }
 
     @Redirect(method = "isNotHoldingLovedItemInOffHand", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/monster/piglin/PiglinAi;isLovedItem(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private static boolean isGoldenItem(ItemStack stack) {
-        return stack.is(PiglinAi.BARTERING_ITEM) || stack.is(ItemTags.PIGLIN_LOVED);
+    private static boolean isGoldenItem(ItemStack itemStack) {
+        return itemStack.is(PiglinAi.BARTERING_ITEM) || itemStack.is(ItemTags.PIGLIN_LOVED);
     }
 
     @Inject(method = "wasHurtBy", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/ai/Brain;setMemoryWithExpiry(Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;Ljava/lang/Object;J)V"))
-    private static void hasNotBeenHitByPlayer(ServerLevel level, Piglin piglin, LivingEntity attacker, CallbackInfo ci) {
-        ((CachedPiglin) piglin).toobee$setHasNotBeenHitByPlayer(false);
+    private static void hasNotBeenHitByPlayer(ServerLevel level, Piglin body, LivingEntity attacker, CallbackInfo ci) {
+        ((CachedPiglin) body).toobee$setHasNotBeenHitByPlayer(false);
     }
 }

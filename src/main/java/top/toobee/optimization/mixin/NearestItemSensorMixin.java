@@ -28,19 +28,18 @@ public abstract class NearestItemSensorMixin {
             = "doTick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;)V";
 
     @Inject(method = SENSE, cancellable = true, at = @At("HEAD"))
-    protected void head(ServerLevel world, Mob entity, CallbackInfo ci, @Share("cache") LocalRef<PiglinCache> c) {
-        if (entity instanceof Piglin piglin) {
-            if (PiglinAiInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()) {
-                final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
-                if (cache != null) {
-                    c.set(cache);
-                    if (cache.getNearestItems() != null) {
-                        entity.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
-                        ci.cancel();
-                    }
+    protected void head(ServerLevel level, Mob body, CallbackInfo ci, @Share("cache") LocalRef<PiglinCache> c) {
+        if (body instanceof Piglin piglin) {
+            final PiglinCache cache = ((CachedPiglin) piglin).toobee$getCache();
+            if (PiglinAiInvoker.isNotHoldingLovedItemInOffHand(piglin)) {
+                if (cache == null) return;
+                c.set(cache);
+                if (cache.getNearestItems() != null) {
+                    piglin.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(level, piglin));
+                    ci.cancel();
                 }
             } else {
-                entity.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, Optional.empty());
+                piglin.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, Optional.empty());
                 ci.cancel();
             }
         }
@@ -48,15 +47,15 @@ public abstract class NearestItemSensorMixin {
 
     // Wait for more accurate detection
     @Inject(method = SENSE, cancellable = true,
-            at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V", shift = At.Shift.AFTER, remap = false))
-    protected void sort(ServerLevel world, Mob entity, CallbackInfo ci,
-                        @Share("cache") LocalRef<PiglinCache> c, @Local List<ItemEntity> list) {
-        if (entity instanceof Piglin piglin) {
+            at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V", shift = At.Shift.AFTER))
+    protected void sort(ServerLevel level, Mob body, CallbackInfo ci,
+                        @Share("cache") LocalRef<PiglinCache> c, @Local(name = "items") List<ItemEntity> items) {
+        if (body instanceof Piglin piglin) {
             final PiglinCache cache = c.get();
-            if (cache != null && PiglinAiInvoker.doesNotHaveGoldInOffHand(piglin) && piglin.canPickUpLoot()
-                    && ((CachedPiglin) piglin).toobee$hasNotBeenHitByPlayer()) {
-                cache.setNearestItems(list);
-                piglin.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(world, piglin));
+            if (cache == null) return;
+            if (PiglinAiInvoker.isNotHoldingLovedItemInOffHand(piglin) && piglin.canPickUpLoot() && ((CachedPiglin) piglin).toobee$hasNotBeenHitByPlayer()) {
+                cache.setNearestItems(items);
+                piglin.getBrain().setMemory(NEAREST_VISIBLE_WANTED_ITEM, cache.getNearestItem(level, piglin));
                 ci.cancel();
             }
         }

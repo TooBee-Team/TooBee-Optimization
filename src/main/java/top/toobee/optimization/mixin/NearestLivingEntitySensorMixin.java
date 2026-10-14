@@ -20,11 +20,11 @@ public abstract class NearestLivingEntitySensorMixin<T extends LivingEntity> {
     // Some mods might inject at the head of this as well,
     // mine should be with higher priority to cutoff as much calculation as possible.
     @Inject(method = "doTick", at = @At("HEAD"), cancellable = true, order = 900)
-    public void head(final ServerLevel level, final T entity, final CallbackInfo ci) {
+    public void head(final ServerLevel level, final T body, final CallbackInfo ci) {
         // The implementation of warden is moved to WardenAttackablesSensorMixin
         // Wait for completing more
-        if (entity instanceof Piglin mob) {
-            final var cache = ((CachedPiglin) entity).toobee$getCache();
+        if (body instanceof Piglin mob) {
+            final var cache = ((CachedPiglin) body).toobee$getCache();
             if (cache != null && cache.getHasUpdatedThisTick()) {
                 cache.senseNearestLivingEntities(level, mob);
                 ci.cancel();
@@ -33,13 +33,14 @@ public abstract class NearestLivingEntitySensorMixin<T extends LivingEntity> {
     }
 
     @Inject(method = "doTick", at = @At("TAIL"))
-    public void tail(final ServerLevel level, final T entity, final CallbackInfo ci, @Local final List<LivingEntity> list) {
-        if (entity instanceof CachedMob<?,?> m) {
+    public void tail(final ServerLevel level, final T body, final CallbackInfo ci,
+                     @Local(name = "livingEntities") final List<LivingEntity> livingEntities) {
+        if (body instanceof CachedMob<?,?> m) {
             final var b = m.toobee$getCache();
             if (b == null)
-                m.toobee$getCacheManager().checkToCreate(level, entity.blockPosition(), list);
+                m.toobee$getCacheManager().checkToCreate(level, body.blockPosition(), livingEntities);
             else
-                b.setTrackers(list);
+                b.setTrackers(livingEntities);
         }
     }
 

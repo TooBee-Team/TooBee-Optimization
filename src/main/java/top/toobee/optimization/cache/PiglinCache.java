@@ -77,7 +77,6 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
         brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, c.NEAREST_VISIBLE_ADULT_PIGLINS);
         brain.setMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, c.VISIBLE_ADULT_PIGLIN_COUNT);
         brain.setMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, c.VISIBLE_ADULT_HOGLIN_COUNT);
-
     }
 
     public void reset(Brain<@NotNull Piglin> brain) {
@@ -115,12 +114,9 @@ public final class PiglinCache extends StackingMobCache<Piglin> {
     }
 
     public void setNearestItems(@Nullable List<ItemEntity> nearestItems) {
-        if (nearestItems == null)
-            this.nearestItems = null;
-        else
-            this.nearestItems = ListExt.prioritize(nearestItems,
-                    it -> it.position().closerThan(pos.getCenter(), 32.0),
-                    it -> it.getItem().is(PiglinAi.BARTERING_ITEM) && it.blockPosition().equals(pos));
+        this.nearestItems = nearestItems == null ? null : ListExt.prioritize(nearestItems,
+                it -> it.position().closerThan(pos.getCenter(), 32.0),
+                it -> it.getItem().is(PiglinAi.BARTERING_ITEM) && it.blockPosition().distManhattan(pos) < 4);
     }
 
     public void redirectAttacking(Piglin instance, boolean attacking) {
